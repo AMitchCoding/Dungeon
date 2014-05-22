@@ -32,7 +32,9 @@ namespace Dungeon
         string doorWait = "none";
         Tile doorTile;
         string moveType = "one";
-
+        TimeSpan oldtime, time;
+        bool held = false;
+        bool repeat = false;
 
         public Game1()
         {
@@ -93,9 +95,11 @@ namespace Dungeon
                 this.Exit();
 
             // TODO: Add your update logic here
+            time = gameTime.TotalGameTime;
             UpdateInput();
             foreach (NPC npc in level.npcs)
                 npc.npcStillAlive(level.grid);
+
 
             base.Update(gameTime);
         }
@@ -130,6 +134,22 @@ namespace Dungeon
         {
             KeyboardState newState = Keyboard.GetState();
 
+            //Checks if the same key has been held for a period of time. 
+            if(newState.Equals(oldState)){
+                if(!held){
+                    oldtime = time;
+                    held = true;
+                }else{
+                    if (!repeat && time.TotalMilliseconds - oldtime.TotalMilliseconds > 250)
+                    {
+                        repeat = true;
+                    }
+                }
+            }else{
+                held = false;
+                repeat = false;
+            }
+
             // Is the SPACE key down?
             if (newState.IsKeyDown(Keys.Space))
             {
@@ -144,7 +164,7 @@ namespace Dungeon
             } 
             if (newState.IsKeyDown(Keys.Left) || newState.IsKeyDown(Keys.NumPad4))
             {
-                if (!oldState.IsKeyDown(Keys.Left) && !oldState.IsKeyDown(Keys.NumPad4))
+                if (!oldState.IsKeyDown(Keys.Left) && !oldState.IsKeyDown(Keys.NumPad4) || repeat)
                 {
                     if (doorWait != "none")
                     {
@@ -169,7 +189,7 @@ namespace Dungeon
             }
             if (newState.IsKeyDown(Keys.NumPad7))
             {
-                if (!oldState.IsKeyDown(Keys.NumPad7))
+                if (!oldState.IsKeyDown(Keys.NumPad7) || repeat)
                 {
                     if (doorWait != "none")
                     {
@@ -194,7 +214,7 @@ namespace Dungeon
             }
             if (newState.IsKeyDown(Keys.Up) || newState.IsKeyDown(Keys.NumPad8))
             {
-                if (!oldState.IsKeyDown(Keys.Up) && !oldState.IsKeyDown(Keys.NumPad8))
+                if (!oldState.IsKeyDown(Keys.Up) && !oldState.IsKeyDown(Keys.NumPad8) || repeat)
                 {
                     if (doorWait != "none")
                     {
@@ -219,7 +239,7 @@ namespace Dungeon
             }
             if (newState.IsKeyDown(Keys.NumPad9))
             {
-                if (!oldState.IsKeyDown(Keys.NumPad9))
+                if (!oldState.IsKeyDown(Keys.NumPad9) || repeat)
                 {
                     if (doorWait != "none")
                     {
@@ -244,7 +264,7 @@ namespace Dungeon
             }
             if (newState.IsKeyDown(Keys.Right) || newState.IsKeyDown(Keys.NumPad6))
             {
-                if (!oldState.IsKeyDown(Keys.Right) && !oldState.IsKeyDown(Keys.NumPad6))
+                if (!oldState.IsKeyDown(Keys.Right) && !oldState.IsKeyDown(Keys.NumPad6) || repeat)
                 {
                     if (doorWait != "none")
                     {
@@ -269,7 +289,7 @@ namespace Dungeon
             }
             if (newState.IsKeyDown(Keys.NumPad3))
             {
-                if (!oldState.IsKeyDown(Keys.NumPad3))
+                if (!oldState.IsKeyDown(Keys.NumPad3) || repeat)
                 {
                     if (doorWait != "none")
                     {
@@ -294,7 +314,7 @@ namespace Dungeon
             }
             if (newState.IsKeyDown(Keys.Down) || newState.IsKeyDown(Keys.NumPad2))
             {
-                if (!oldState.IsKeyDown(Keys.Down) && !oldState.IsKeyDown(Keys.NumPad2))
+                if (!oldState.IsKeyDown(Keys.Down) && !oldState.IsKeyDown(Keys.NumPad2) || repeat)
                 {
                     if (doorWait != "none")
                     {
@@ -319,7 +339,7 @@ namespace Dungeon
             }
             if (newState.IsKeyDown(Keys.NumPad1))
             {
-                if (!oldState.IsKeyDown(Keys.NumPad1))
+                if (!oldState.IsKeyDown(Keys.NumPad1) || repeat)
                 {
                     if (doorWait != "none")
                     {
