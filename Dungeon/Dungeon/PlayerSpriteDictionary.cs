@@ -13,6 +13,7 @@ namespace Dungeon
 
         public PlayerSpriteDictionary()
         {
+            // (topleft x, topleft y, bottom right x, bottom right y)
             sprites.Add("human_f", new Vector4(0, 0, 31, 31));
             sprites.Add("human_m", new Vector4(32, 0, 63, 31));
             sprites.Add("elf_f", new Vector4(64, 0, 95, 31));

@@ -23,6 +23,7 @@ namespace Dungeon
             this._playerSprite.Add("blue_cape");
             this._playerSprite.Add("mummy_m");
             this._playerSprite.Add("demon_trident");
+            this._playerSprite.Add("plate_black");
         }
         public Vector2 location
         {
