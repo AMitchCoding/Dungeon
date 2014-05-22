@@ -1,0 +1,23 @@
+Dungeon
+----------------------
+V1.2 05/21/2014
+Features:
++ Couple cardboard cutout monsters to slay
+	Each has 10hp you hit for 1
+
+Fixes:
+- Memory issue due to Tile Dictionary
+
+V1.1 05/18/2014
+Features:
++ Numpad support
++ Open doors with the O key
++ Close doors with the C key
++ Five step with / key followed by direction
++ Step to wall with * key followed by direction
+
+Fixes:
+- Bug caused by floor count not being reset
+
+V1.0 05/16/2014
+First Build  (not really, but starting changelog from last one shared)
