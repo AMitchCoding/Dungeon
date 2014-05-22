@@ -13,6 +13,7 @@ namespace Dungeon
         public NPCDictionary()
         {
 
+            // NPC ( location x, location y, health, attack, defense, difficulty, death tile )
             _NPCSprites.Add("mons_shadow", new NPC(new Vector2(24, 13), 10, 1, 0, 0, "empty"));
             _NPCSprites.Add("mons_earth_elemental", new NPC(new Vector2(25, 13), 10, 1, 0, 0, "empty"));
             _NPCSprites.Add("mons_fire_elemental", new NPC(new Vector2(26, 13), 10, 1, 0, 0, "empty"));
