@@ -13,6 +13,7 @@ namespace Dungeon
 {
     /// <summary>
     /// This is the main type for your game
+    /// This is a new comment to test a commit and push after Mikhail committed and pushed
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
