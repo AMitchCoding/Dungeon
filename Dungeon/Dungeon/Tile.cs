@@ -10,6 +10,9 @@ namespace Dungeon
     {
         private bool _isEdge = false;
         private bool _isWall = true;
+        private bool _sightBlocker = true;
+        private bool _visible = false;
+        private bool _seen = false;
         private Vector2 _tilePos = new Vector2(0, 0);
         private string _tileName = "dngn_rock_wall_dark_gray";
         List<string> _items = new List<string>();
@@ -50,6 +53,23 @@ namespace Dungeon
             get { return this._isWall; }
         }
 
+        public bool visible
+        {
+            set { this._visible = value; }
+            get { return this._visible; }
+        }
+        public bool seen
+        {
+            set { this._seen = value; }
+            get { return this._seen; }
+        }
+
+        public bool sightBlocker
+        {
+            set { this._sightBlocker = value; }
+            get { return this._sightBlocker; }
+        }
+
         public void AddItem(string item)
         {
             this._items.Add(item);
@@ -76,6 +96,7 @@ namespace Dungeon
             {
                 this._entities.Remove("dngn_closed_door");
                 this._entities.Add("dngn_open_door");
+                this._sightBlocker = false;
             }
         }
 
@@ -85,12 +106,14 @@ namespace Dungeon
             {
                 this._entities.Remove("dngn_open_door");
                 this._entities.Add("dngn_closed_door");
+                this._sightBlocker = true;
             }
         }
 
 
         public void DrawTile(SpriteBatch spriteBatch, Texture2D tileTexture, Vector2 destination, TileDictionary tiles)
         {
+            
             Rectangle tileRect = new Rectangle((int)tiles.GetTile(_tileName).X * 32, (int)tiles.GetTile(_tileName).Y * 32, 
                 tileTexture.Width / 30, tileTexture.Height / 32);
             spriteBatch.Draw(tileTexture, destination, tileRect, Color.White);
@@ -100,6 +123,21 @@ namespace Dungeon
                 Rectangle entityRect = new Rectangle((int)tiles.GetTile(entity).X * 32, (int)tiles.GetTile(entity).Y * 32,
                 tileTexture.Width / 30, tileTexture.Height / 32);
                 spriteBatch.Draw(tileTexture, destination, entityRect, Color.White);
+            }
+        }
+        public void DrawTileVisibility(SpriteBatch spriteBatch, Texture2D tileTexture, Vector2 destination, TileDictionary tiles)
+        {
+            if (!this._visible && this._seen)
+            {
+                Rectangle visRect = new Rectangle((int)tiles.GetTile("mesh").X * 32, (int)tiles.GetTile("mesh").Y * 32,
+                    tileTexture.Width / 30, tileTexture.Height / 32);
+                spriteBatch.Draw(tileTexture, destination, visRect, Color.White);
+            }
+            else if(!this._visible)
+            {
+                Rectangle visRect = new Rectangle((int)tiles.GetTile("dngn_unseen").X * 32, (int)tiles.GetTile("dngn_unseen").Y * 32,
+                    tileTexture.Width / 30, tileTexture.Height / 32);
+                spriteBatch.Draw(tileTexture, destination, visRect, Color.White);
             }
         }
     }

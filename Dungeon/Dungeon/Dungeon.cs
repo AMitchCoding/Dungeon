@@ -266,6 +266,7 @@ namespace Dungeon
                             !_grid[x, y].isEdge)
                         {
                             _grid[x, y].tileName = "dngn_floor";
+                            _grid[x, y].sightBlocker = false;
                             _grid[x, y].isWall = false;
                         }
                     }

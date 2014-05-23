@@ -87,6 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dungeon.cs" />
+    <Compile Include="FOV.cs" />
     <Compile Include="NPC.cs" />
     <Compile Include="NPCDictionary.cs" />
     <Compile Include="Player.cs" />

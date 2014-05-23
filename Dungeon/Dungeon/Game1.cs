@@ -57,7 +57,7 @@ namespace Dungeon
             // TODO: Add your initialization logic here
             level = new Dungeon(npcDicationary);
             dungeon.Add(level);
-            player = new Player(level.upStairs);
+            player = new Player(level.upStairs, level.grid);
             base.Initialize();
         }
 
@@ -123,9 +123,12 @@ namespace Dungeon
                     level.grid[x, y].DrawTile(spriteBatch, tileTexture, destination, tileDictionary);
                     if(level.grid[x, y].npc != null)
                         level.grid[x, y].npc.DrawNPC(spriteBatch, tileTexture);
+                    level.grid[x, y].DrawTileVisibility(spriteBatch, tileTexture, destination, tileDictionary);
                 }
             }
+
             player.DrawPlayer(spriteBatch, playerSpriteSheet, player.location * 32);
+
             spriteBatch.End();
 
             base.Draw(gameTime);
@@ -160,7 +163,7 @@ namespace Dungeon
                     level = new Dungeon(npcDicationary);
                     dungeon.Add(level);
                     currentdngn_floor = 0;
-                    player = new Player(level.upStairs);
+                    player = new Player(level.upStairs, level.grid);
                 }
             } 
             if (newState.IsKeyDown(Keys.Left) || newState.IsKeyDown(Keys.NumPad4))
