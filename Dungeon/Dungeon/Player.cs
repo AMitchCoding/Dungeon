@@ -99,6 +99,74 @@ namespace Dungeon
                 return false;
         }
 
+        public bool MoveTo(Vector2 moveTo, Tile[,] grid)
+        {
+            Tile newTile = grid[(int)moveTo.X, (int)moveTo.Y];  //move to
+            Tile currentTile = grid[(int)this._location.X, (int)this._location.Y];  //move from
+
+            if (newTile.isWall){
+                return false;
+            }
+
+            List<Vector3> moves = new List<Vector3>();
+            moves.Add(new Vector3(moveTo.X, moveTo.Y, 0));  // Add the end point first, build from there.
+
+            //Generate list of valid squares up to minimal distance
+            int ele = 0;
+            while (moves.Count > ele)
+            {
+                int x = (int)moves[ele].X;
+                int y = (int)moves[ele].Y;
+                int z = (int)moves[ele].Z;
+                for (int i = -1; i < 2; i++)
+                {
+                    for (int j = -1; j < 2; j++)
+                    {
+                        if (i != 0 && j != 0 && !grid[x + i, y + j].isWall)  //Don't test current tile, walls, or living npcs
+                        {
+                            int k = 0;
+                            while (k < moves.Count)
+                            {
+                                if (moves[k].X == x && moves[k].Y == y && moves[k].Z >= z)  //Remove duplicate squares with higher costs
+                                {
+                                    moves.RemoveAt(k);
+                                }else{
+                                    k++;    //Only increment LCV if no removal occurred
+                                }
+                            }
+                            if (this._location.X == x + i && this._location.Y == y + i) //We've reached the start location, terminate loops
+                            {
+                                i = 2; 
+                                j = 2;
+                                break;
+                            }
+                            moves.Add(new Vector3(x + i, y + j, z + 1)); //Add to end of list
+                            
+                        }
+                    }
+                }
+                ele++;
+            }
+
+            int best = 65535;   //Need randomly large value greater than worst case distance.
+            Vector2 nextMove = new Vector2(0,0);   //Perhaps return array of moves (doesn't currently draw moves)
+            while(moves.Count > 0){
+                foreach (Vector3 move in moves){
+                    if ((2 > move.X - this._location.X && -2 < move.X - this._location.X) && (2 > move.Y - this._location.Y && -2 < move.Y - this._location.Y))
+                    {
+                        if (move.Z < best)
+                        {
+                            nextMove = new Vector2(move.X, move.Y);
+                            best = (int)move.Z;
+                        }
+                    }
+                }
+                MovePlayer(nextMove, grid);
+            }
+
+            return true;
+        }
+
         public void Kill()
         {
         }

@@ -428,6 +428,15 @@ namespace Dungeon
                 }
             }
 
+            if (newState.IsKeyDown(Keys.X))
+            {
+                if (!oldState.IsKeyDown(Keys.X))
+                {
+                    player.MoveTo(new Vector2(2,2),level.grid);
+                }
+            }
+
+
             // Update saved state.
             oldState = newState;
         }
