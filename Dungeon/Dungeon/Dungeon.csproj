@@ -87,13 +87,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dungeon.cs" />
+    <Compile Include="FOV.cs" />
     <Compile Include="NPC.cs" />
     <Compile Include="NPCDictionary.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
-    <Compile Include="TestFile.cs" />
     <Compile Include="Tile.cs" />
     <Compile Include="PlayerSpriteDictionary.cs" />
     <Compile Include="TileDictionary.cs" />

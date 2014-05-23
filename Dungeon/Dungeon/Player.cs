@@ -13,17 +13,21 @@ namespace Dungeon
         Vector2 _location = new Vector2(0, 0);
         PlayerSpriteDictionary _playerSpriteSheet = new PlayerSpriteDictionary();
         List<string> _playerSprite = new List<string>();
+        FOV fov;
         bool isAlive = true;
         bool nearMons = false;
         int health = 10;
 
-        public Player(Tile startPos)
+        public Player(Tile startPos, Tile[,] grid)
         {
             this.location = startPos.tilePos;
+            startPos.sightBlocker = false;
             this._playerSprite.Add("blue_cape");
             this._playerSprite.Add("mummy_m");
             this._playerSprite.Add("demon_trident");
             this._playerSprite.Add("plate_black");
+            fov = new FOV(grid, this._location);
+            fov.GetVisibility();
         }
         public Vector2 location
         {
@@ -33,7 +37,6 @@ namespace Dungeon
 
         public void Movement(Vector2 move, Tile[,] grid, string type)
         {
-
             switch(type)
             {
                 case("one"):
@@ -50,6 +53,8 @@ namespace Dungeon
                     }
                     break;
             }
+            fov = new FOV(grid, this._location);
+            fov.GetVisibility();
         }
 
         public bool MovePlayer(Vector2 move, Tile[,] grid)
@@ -62,8 +67,7 @@ namespace Dungeon
             {
                 if (newTile.entities.Contains("dngn_closed_door"))
                 {
-                    newTile.RemoveEntity("dngn_closed_door");
-                    newTile.AddEntity("dngn_open_door");
+                    newTile.OpenDoor();
                 }
 
                 if(newTile.npc != null)
