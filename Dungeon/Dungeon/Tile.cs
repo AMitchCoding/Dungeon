@@ -13,6 +13,7 @@ namespace Dungeon
         private bool _sightBlocker = true;
         private bool _visible = false;
         private bool _seen = false;
+        private bool _scanned = false;
         private Vector2 _tilePos = new Vector2(0, 0);
         private string _tileName = "dngn_rock_wall_dark_gray";
         List<string> _items = new List<string>();
@@ -68,6 +69,11 @@ namespace Dungeon
         {
             set { this._sightBlocker = value; }
             get { return this._sightBlocker; }
+        }
+        public bool scanned
+        {
+            set { this._scanned = value; }
+            get { return this._scanned; }
         }
 
         public void AddItem(string item)

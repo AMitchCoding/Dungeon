@@ -24,8 +24,19 @@ namespace Dungeon
         /// </summary>
         public void GetVisibility()
         {
+            int visrange2 = VIEW_DISTANCE * VIEW_DISTANCE;
+
             foreach (int o in this._octants)
-                ScanOctant(1, o, 1.0, 0.0);
+                ScanOctant(1, o, 1.0, 0.0, visrange2);
+            foreach (Tile tile in this._grid)
+            {
+                if(!tile.scanned && tile.visible)
+                {
+                    tile.visible = false;
+                    tile.seen = true;
+                }
+                tile.scanned = false;
+            }
 
         }
         /// <summary>
@@ -35,10 +46,8 @@ namespace Dungeon
         /// <param name="pOctant">Octant being examined</param>
         /// <param name="pStartSlope">Start slope of the octant</param>
         /// <param name="pEndSlope">End slope of the octance</param>
-        protected void ScanOctant(int pDepth, int pOctant, double pStartSlope, double pEndSlope)
+        protected void ScanOctant(int pDepth, int pOctant, double pStartSlope, double pEndSlope, int visrange2)
         {
-
-            int visrange2 = VIEW_DISTANCE * VIEW_DISTANCE;
             int x = 0;
             int y = 0;
 
@@ -54,6 +63,8 @@ namespace Dungeon
 
                     while (GetSlope(x, y, (int)this._location.X, (int)this._location.Y, false) >= pEndSlope)
                     {
+                        this._grid[x, y].scanned = true;
+
                         if (GetVisDistance(x, y, (int)this._location.X, (int)this._location.Y) <= visrange2)
                         {
                             if (this._grid[x, y].sightBlocker) //current cell blocked
@@ -61,7 +72,7 @@ namespace Dungeon
                                 this._grid[x, y].visible = true;
                                 if (x - 1 >= 0 && !this._grid[x - 1, y].sightBlocker) //prior cell within range AND open...
                                     //...incremenet the depth, adjust the endslope and recurse
-                                    ScanOctant(pDepth + 1, pOctant, pStartSlope, GetSlope(x - 0.5, y + 0.5, (int)this._location.X, (int)this._location.Y, false));
+                                    ScanOctant(pDepth + 1, pOctant, pStartSlope, GetSlope(x - 0.5, y + 0.5, (int)this._location.X, (int)this._location.Y, false), visrange2);
                             }
                             else
                             {
@@ -70,7 +81,7 @@ namespace Dungeon
                                     //..adjust the startslope
                                     pStartSlope = GetSlope(x - 0.5, y - 0.5, (int)this._location.X, (int)this._location.Y, false);
 
-                                this._grid[x,y].visible = true;
+                                this._grid[x, y].visible = true;
                             }
                         }
                         else
@@ -96,13 +107,15 @@ namespace Dungeon
 
                     while (GetSlope(x, y, (int)this._location.X, (int)this._location.Y, false) <= pEndSlope)
                     {
+                        this._grid[x, y].scanned = true;
+
                         if (GetVisDistance(x, y, (int)this._location.X, (int)this._location.Y) <= visrange2)
                         {
                             if (this._grid[x, y].sightBlocker)
                             {
                                 this._grid[x, y].visible = true;
                                 if (x + 1 < this._grid.GetLength(0) && !this._grid[x + 1, y].sightBlocker)
-                                    ScanOctant(pDepth + 1, pOctant, pStartSlope, GetSlope(x + 0.5, y + 0.5, (int)this._location.X, (int)this._location.Y, false));
+                                    ScanOctant(pDepth + 1, pOctant, pStartSlope, GetSlope(x + 0.5, y + 0.5, (int)this._location.X, (int)this._location.Y, false), visrange2);
                             }
                             else
                             {
@@ -135,6 +148,7 @@ namespace Dungeon
 
                     while (GetSlope(x, y, (int)this._location.X, (int)this._location.Y, true) <= pEndSlope)
                     {
+                        this._grid[x, y].scanned = true;
 
                         if (GetVisDistance(x, y, (int)this._location.X, (int)this._location.Y) <= visrange2)
                         {
@@ -143,7 +157,7 @@ namespace Dungeon
                             {
                                 this._grid[x, y].visible = true;
                                 if (y - 1 >= 0 && !this._grid[x, y - 1].sightBlocker)
-                                    ScanOctant(pDepth + 1, pOctant, pStartSlope, GetSlope(x - 0.5, y - 0.5, (int)this._location.X, (int)this._location.Y, true));
+                                    ScanOctant(pDepth + 1, pOctant, pStartSlope, GetSlope(x - 0.5, y - 0.5, (int)this._location.X, (int)this._location.Y, true), visrange2);
                             }
                             else
                             {
@@ -176,6 +190,7 @@ namespace Dungeon
 
                     while (GetSlope(x, y, (int)this._location.X, (int)this._location.Y, true) >= pEndSlope)
                     {
+                        this._grid[x, y].scanned = true;
 
                         if (GetVisDistance(x, y, (int)this._location.X, (int)this._location.Y) <= visrange2)
                         {
@@ -184,7 +199,7 @@ namespace Dungeon
                             {
                                 this._grid[x, y].visible = true;
                                 if (y + 1 < this._grid.GetLength(1) && !this._grid[x, y + 1].sightBlocker)
-                                    ScanOctant(pDepth + 1, pOctant, pStartSlope, GetSlope(x - 0.5, y + 0.5, (int)this._location.X, (int)this._location.Y, true));
+                                    ScanOctant(pDepth + 1, pOctant, pStartSlope, GetSlope(x - 0.5, y + 0.5, (int)this._location.X, (int)this._location.Y, true), visrange2);
                             }
                             else
                             {
@@ -217,6 +232,8 @@ namespace Dungeon
 
                     while (GetSlope(x, y, (int)this._location.X, (int)this._location.Y, false) >= pEndSlope)
                     {
+                        this._grid[x, y].scanned = true;
+
                         if (GetVisDistance(x, y, (int)this._location.X, (int)this._location.Y) <= visrange2)
                         {
 
@@ -224,7 +241,7 @@ namespace Dungeon
                             {
                                 this._grid[x, y].visible = true;
                                 if (x + 1 < this._grid.GetLength(1) && !this._grid[x + 1, y].sightBlocker)
-                                    ScanOctant(pDepth + 1, pOctant, pStartSlope, GetSlope(x + 0.5, y - 0.5, (int)this._location.X, (int)this._location.Y, false));
+                                    ScanOctant(pDepth + 1, pOctant, pStartSlope, GetSlope(x + 0.5, y - 0.5, (int)this._location.X, (int)this._location.Y, false), visrange2);
                             }
                             else
                             {
@@ -258,6 +275,8 @@ namespace Dungeon
 
                     while (GetSlope(x, y, (int)this._location.X, (int)this._location.Y, false) <= pEndSlope)
                     {
+                        this._grid[x, y].scanned = true;
+
                         if (GetVisDistance(x, y, (int)this._location.X, (int)this._location.Y) <= visrange2)
                         {
 
@@ -265,7 +284,7 @@ namespace Dungeon
                             {
                                 this._grid[x, y].visible = true;
                                 if (x - 1 >= 0 && !this._grid[x - 1, y].sightBlocker)
-                                    ScanOctant(pDepth + 1, pOctant, pStartSlope, GetSlope(x - 0.5, y - 0.5, (int)this._location.X, (int)this._location.Y, false));
+                                    ScanOctant(pDepth + 1, pOctant, pStartSlope, GetSlope(x - 0.5, y - 0.5, (int)this._location.X, (int)this._location.Y, false), visrange2);
                             }
                             else
                             {
@@ -299,6 +318,7 @@ namespace Dungeon
 
                     while (GetSlope(x, y, (int)this._location.X, (int)this._location.Y, true) <= pEndSlope)
                     {
+                        this._grid[x, y].scanned = true;
 
                         if (GetVisDistance(x, y, (int)this._location.X, (int)this._location.Y) <= visrange2)
                         {
@@ -307,7 +327,7 @@ namespace Dungeon
                             {
                                 this._grid[x, y].visible = true;
                                 if (y + 1 < this._grid.GetLength(1) && !this._grid[x, y + 1].sightBlocker)
-                                    ScanOctant(pDepth + 1, pOctant, pStartSlope, GetSlope(x + 0.5, y + 0.5, (int)this._location.X, (int)this._location.Y, true));
+                                    ScanOctant(pDepth + 1, pOctant, pStartSlope, GetSlope(x + 0.5, y + 0.5, (int)this._location.X, (int)this._location.Y, true), visrange2);
                             }
                             else
                             {
@@ -340,6 +360,7 @@ namespace Dungeon
 
                     while (GetSlope(x, y, (int)this._location.X, (int)this._location.Y, true) >= pEndSlope)
                     {
+                        this._grid[x, y].scanned = true;
 
                         if (GetVisDistance(x, y, (int)this._location.X, (int)this._location.Y) <= visrange2)
                         {
@@ -348,7 +369,7 @@ namespace Dungeon
                             {
                                 this._grid[x, y].visible = true;
                                 if (y - 1 >= 0 && !this._grid[x, y - 1].sightBlocker)
-                                    ScanOctant(pDepth + 1, pOctant, pStartSlope, GetSlope(x + 0.5, y - 0.5, (int)this._location.X, (int)this._location.Y, true));
+                                    ScanOctant(pDepth + 1, pOctant, pStartSlope, GetSlope(x + 0.5, y - 0.5, (int)this._location.X, (int)this._location.Y, true), visrange2);
 
                             }
                             else
@@ -385,7 +406,7 @@ namespace Dungeon
                 y = this._grid.GetLength(1) - 1;
 
             if (pDepth < VIEW_DISTANCE + 1 & !this._grid[x, y].sightBlocker)
-                ScanOctant(pDepth + 1, pOctant, pStartSlope, pEndSlope);
+                ScanOctant(pDepth + 1, pOctant, pStartSlope, pEndSlope, visrange2);
 
         }
         /// <summary>
