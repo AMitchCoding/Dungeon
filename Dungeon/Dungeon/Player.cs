@@ -13,6 +13,7 @@ namespace Dungeon
         Vector2 _location = new Vector2(0, 0);
         PlayerSpriteDictionary _playerSpriteSheet = new PlayerSpriteDictionary();
         List<string> _playerSprite = new List<string>();
+        List<Armor> _playerArmor = new List<Armor>();
         FOV fov;
         bool isAlive = true;
         bool nearMons = false;
@@ -25,7 +26,7 @@ namespace Dungeon
             this._playerSprite.Add("blue_cape");
             this._playerSprite.Add("mummy_m");
             this._playerSprite.Add("demon_trident");
-            this._playerSprite.Add("plate_black");
+            this._playerArmor.Add(new Armor(_playerSpriteSheet.GetArmor("plate_black")));
             fov = new FOV(grid, this._location);
             fov.GetVisibility();
         }
@@ -180,6 +181,10 @@ namespace Dungeon
             foreach (string sprite in _playerSprite)
             {
                 spriteBatch.Draw(tileTexture, destination, _playerSpriteSheet.GetSprite(sprite), Color.White);
+            }
+            foreach (Armor armor in _playerArmor)
+            {
+                spriteBatch.Draw(tileTexture, new Vector2(destination.X + armor.offset.X,destination.Y + armor.offset.Y) , _playerSpriteSheet.GetSprite(armor.spriteLoc), Color.White);
             }
         }
     }
