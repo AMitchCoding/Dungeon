@@ -13,7 +13,18 @@ namespace Dungeon
         Vector2 _location = new Vector2(0, 0);
         PlayerSpriteDictionary _playerSpriteSheet = new PlayerSpriteDictionary();
         string _playerRace;
-        List<Item> _playerItems = new List<Item>();
+        //List<Item> _playerItems = new List<Item>();
+        Dictionary<String, Item> _playerItems = new Dictionary<String, Item>()
+            {
+                {"head", null},
+                {"chest", null},
+                {"back", null},
+                {"hands", null},
+                {"legs", null},
+                {"feet", null},
+                {"main_hand", null},
+                {"off_hand", null}
+            };
         FOV fov;
         bool isAlive = true;
         bool nearMons = false;
@@ -24,13 +35,14 @@ namespace Dungeon
             this.location = startPos.tilePos;
             startPos.sightBlocker = false;
             this._playerRace = "mummy_m";
-            //this._playerSprite.Add("demon_trident");
-            //this._playerSprite.Add("blue_cape");
-
-            //this._playerItems.Add(new Item(_playerSpriteSheet.GetItem("plate_black")));
-            //this._playerItems.Add(new Item(_playerSpriteSheet.GetItem("short_red_shoes")));
-
-            //Determining Sprite offsets
+            this._playerItems["head"] = new Item(_playerSpriteSheet.GetItem("fhelm_evil"));
+            this._playerItems["chest"] = new Item(_playerSpriteSheet.GetItem("chainmail3"));
+            this._playerItems["back"] = new Item(_playerSpriteSheet.GetItem("blue_cape"));
+            this._playerItems["hands"] = new Item(_playerSpriteSheet.GetItem("glove_blue"));
+            this._playerItems["legs"] = new Item(_playerSpriteSheet.GetItem("leg_arm_steel"));
+            this._playerItems["feet"] = new Item(_playerSpriteSheet.GetItem("short_brown_shoes"));
+            this._playerItems["main_hand"] = new Item(_playerSpriteSheet.GetItem("spiked_flail"));
+            this._playerItems["off_hand"] = new Item(_playerSpriteSheet.GetItem("book_white"));
 
             fov = new FOV(grid, this._location);
             fov.GetVisibility();
@@ -184,12 +196,16 @@ namespace Dungeon
         internal void DrawPlayer(SpriteBatch spriteBatch, Texture2D tileTexture, Vector2 destination)
         {
             spriteBatch.Draw(tileTexture, destination, _playerSpriteSheet.GetSprite("shadow"), Color.White);
+            spriteBatch.Draw(tileTexture, new Vector2(destination.X + this._playerItems["back"].offset.X, destination.Y + this._playerItems["back"].offset.Y), _playerSpriteSheet.GetSprite(this._playerItems["back"].spriteLoc), Color.White);            
             spriteBatch.Draw(tileTexture, destination, _playerSpriteSheet.GetSprite(_playerRace), Color.White);
 
-            foreach (Item item in _playerItems)
-            {
-                spriteBatch.Draw(tileTexture, new Vector2(destination.X + item.offset.X,destination.Y + item.offset.Y) , _playerSpriteSheet.GetSprite(item.spriteLoc), Color.White);
-            }
+            spriteBatch.Draw(tileTexture, new Vector2(destination.X + this._playerItems["head"].offset.X, destination.Y + this._playerItems["head"].offset.Y), _playerSpriteSheet.GetSprite(this._playerItems["head"].spriteLoc), Color.White);
+            spriteBatch.Draw(tileTexture, new Vector2(destination.X + this._playerItems["chest"].offset.X, destination.Y + this._playerItems["chest"].offset.Y), _playerSpriteSheet.GetSprite(this._playerItems["chest"].spriteLoc), Color.White);
+            spriteBatch.Draw(tileTexture, new Vector2(destination.X + this._playerItems["hands"].offset.X, destination.Y + this._playerItems["hands"].offset.Y), _playerSpriteSheet.GetSprite(this._playerItems["hands"].spriteLoc), Color.White);
+            spriteBatch.Draw(tileTexture, new Vector2(destination.X + this._playerItems["legs"].offset.X, destination.Y + this._playerItems["legs"].offset.Y), _playerSpriteSheet.GetSprite(this._playerItems["legs"].spriteLoc), Color.White);
+            spriteBatch.Draw(tileTexture, new Vector2(destination.X + this._playerItems["feet"].offset.X, destination.Y + this._playerItems["feet"].offset.Y), _playerSpriteSheet.GetSprite(this._playerItems["feet"].spriteLoc), Color.White);
+            spriteBatch.Draw(tileTexture, new Vector2(destination.X + this._playerItems["main_hand"].offset.X, destination.Y + this._playerItems["main_hand"].offset.Y), _playerSpriteSheet.GetSprite(this._playerItems["main_hand"].spriteLoc), Color.White);
+            spriteBatch.Draw(tileTexture, new Vector2(destination.X + this._playerItems["off_hand"].offset.X, destination.Y + this._playerItems["off_hand"].offset.Y), _playerSpriteSheet.GetSprite(this._playerItems["off_hand"].spriteLoc), Color.White);
         }
     }
 }

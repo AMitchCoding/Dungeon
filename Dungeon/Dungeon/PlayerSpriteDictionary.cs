@@ -69,7 +69,7 @@ namespace Dungeon
 
             _characters.Add("shadow", new Vector4(128, 64, 159, 95));
 
-            //Armors
+            //Back
             _itemDictionary.Add("red_cape", new Armor(new Vector4(160, 64, 191, 95), 10, 100));
             _itemDictionary.Add("blue_cape", new Armor(new Vector4(192, 64, 223, 95), 10, 100));
             _itemDictionary.Add("magenta_cape", new Armor(new Vector4(224, 64, 255, 95), 10, 100));
@@ -80,6 +80,8 @@ namespace Dungeon
             _itemDictionary.Add("green_cape", new Armor(new Vector4(384, 64, 415, 95), 10, 100));
             _itemDictionary.Add("cyan_cape", new Armor(new Vector4(416, 64, 447, 95), 10, 100));
             _itemDictionary.Add("white_cape", new Armor(new Vector4(448, 64, 479, 95), 10, 100));
+
+            //Feet
             _itemDictionary.Add("short_red_shoes", new Armor(new Vector4(480, 64, 511, 79), OFFSET_Y_16, 10, 100));
             _itemDictionary.Add("short_purple_shoes", new Armor(new Vector4(480, 80, 511, 95), OFFSET_Y_16, 10, 100));
             _itemDictionary.Add("short_brown_shoes", new Armor(new Vector4(512, 64, 543, 79), OFFSET_Y_16, 10, 100));
@@ -97,6 +99,8 @@ namespace Dungeon
             _itemDictionary.Add("mesh_blue_shoes", new Armor(new Vector4(64, 96, 95, 111), OFFSET_Y_16, 10, 100));
             _itemDictionary.Add("middle_gold_shoes", new Armor(new Vector4(64, 112, 95, 127), OFFSET_Y_16, 10, 100));
             _itemDictionary.Add("long_red_shoes", new Armor(new Vector4(96, 96, 127, 111), OFFSET_Y_16, 10, 100));
+
+            //Pants
             _itemDictionary.Add("bikini_red_bottom", new Armor(new Vector4(128, 96, 159, 111), OFFSET_Y_16, 10, 100));
             _itemDictionary.Add("loincloth_red", new Armor(new Vector4(128, 112, 159, 127), OFFSET_Y_16, 10, 100));
             _itemDictionary.Add("belt_redbrown", new Armor(new Vector4(160, 96, 191, 111), OFFSET_Y_16, 10, 100));
@@ -123,6 +127,8 @@ namespace Dungeon
             _itemDictionary.Add("leg_arm_black", new Armor(new Vector4(480, 112, 511, 127), OFFSET_Y_16, 10, 100));
             _itemDictionary.Add("leg_arm_steel", new Armor(new Vector4(512, 96, 543, 111), OFFSET_Y_16, 10, 100));
             _itemDictionary.Add("leg_arm_green", new Armor(new Vector4(512, 112, 543, 127), OFFSET_Y_16, 10, 100));
+
+            //Chest
             _itemDictionary.Add("robe_blue", new Armor(new Vector4(544, 96, 559, 127), OFFSET_X_8, 10, 100));
             _itemDictionary.Add("robe_black", new Armor(new Vector4(560, 96, 575, 127), OFFSET_X_8, 10, 100));
             _itemDictionary.Add("robe_white", new Armor(new Vector4(576, 96, 591, 127), OFFSET_X_8, 10, 100));
@@ -244,6 +250,8 @@ namespace Dungeon
             _itemDictionary.Add("edison_armor", new Armor(new Vector4(512, 192, 527, 223), OFFSET_X_8, 10, 100));
             _itemDictionary.Add("lears_chain_mail", new Armor(new Vector4(528, 192, 543, 223), OFFSET_X_8, 10, 100));
             _itemDictionary.Add("robe_of_night", new Armor(new Vector4(544, 192, 559, 223), OFFSET_X_8, 10, 100));
+
+            //Hands
             _itemDictionary.Add("glove_red", new Armor(new Vector4(576, 192, 607, 207), OFFSET_Y_8, 10, 100));
             _itemDictionary.Add("glove_gray", new Armor(new Vector4(576, 208, 607, 223), OFFSET_Y_8, 10, 100));
             _itemDictionary.Add("glove_white", new Armor(new Vector4(608, 192, 639, 207), OFFSET_Y_8, 10, 100));
@@ -263,6 +271,8 @@ namespace Dungeon
             _itemDictionary.Add("glove_short_green", new Armor(new Vector4(192, 224, 223, 239), OFFSET_Y_8, 10, 100));
             _itemDictionary.Add("glove_short_blue", new Armor(new Vector4(192, 240, 223, 255), OFFSET_Y_8, 10, 100));
             _itemDictionary.Add("glove_short_gray", new Armor(new Vector4(224, 224, 255, 239), OFFSET_Y_8, 10, 100));
+
+            //Head
             _itemDictionary.Add("hat_ofs", new Armor(new Vector4(416, 416, 431, 431),OFFSET_X_8, 10, 100));
             _itemDictionary.Add("corn_red", new Armor(new Vector4(432, 416, 447, 431),OFFSET_X_8, 10, 100));
             _itemDictionary.Add("straw", new Armor(new Vector4(416, 432, 431, 447),OFFSET_X_8, 10, 100));
@@ -338,7 +348,7 @@ namespace Dungeon
             _itemDictionary.Add("hood_green", new Armor(new Vector4(352, 448, 367, 463),OFFSET_X_8, 10, 100));
             _itemDictionary.Add("mask_ninja_black", new Armor(new Vector4(368, 448, 383, 463),OFFSET_X_8, 10, 100));
 
-            //Weapons
+            //Main hand
             _itemDictionary.Add("dagger", new Weapon(new Vector4(256, 224, 271, 255),10,100));
             _itemDictionary.Add("dagger_slant", new Weapon(new Vector4(272, 224, 287, 255),10,100));
             _itemDictionary.Add("short_sword", new Weapon(new Vector4(288, 224, 303, 255),10,100));
@@ -398,14 +408,14 @@ namespace Dungeon
             _itemDictionary.Add("black_whip", new Weapon(new Vector4(512, 256, 527, 287),10,100));
             _itemDictionary.Add("hammer", new Weapon(new Vector4(528, 256, 543, 287),10,100));
             _itemDictionary.Add("hammer2", new Weapon(new Vector4(544, 256, 559, 287),10,100));
-            _itemDictionary.Add("frail_stick", new Weapon(new Vector4(560, 256, 575, 287),10,100));
-            _itemDictionary.Add("frail", new Weapon(new Vector4(576, 256, 591, 287),10,100));
-            _itemDictionary.Add("spiked_frail", new Weapon(new Vector4(592, 256, 607, 287),10,100));
-            _itemDictionary.Add("great_frail", new Weapon(new Vector4(608, 256, 623, 287),10,100));
-            _itemDictionary.Add("frail_ball2", new Weapon(new Vector4(624, 256, 639, 287),10,100));
-            _itemDictionary.Add("frail_balls", new Weapon(new Vector4(0, 288, 15, 319),10,100));
-            _itemDictionary.Add("frail_ball3", new Weapon(new Vector4(16, 288, 31, 319),10,100));
-            _itemDictionary.Add("frail_ball4", new Weapon(new Vector4(32, 288, 47, 319),10,100));
+            _itemDictionary.Add("flail_stick", new Weapon(new Vector4(560, 256, 575, 287),10,100));
+            _itemDictionary.Add("flail", new Weapon(new Vector4(576, 256, 591, 287),10,100));
+            _itemDictionary.Add("spiked_flail", new Weapon(new Vector4(592, 256, 607, 287),10,100));
+            _itemDictionary.Add("great_flail", new Weapon(new Vector4(608, 256, 623, 287),10,100));
+            _itemDictionary.Add("flail_ball2", new Weapon(new Vector4(624, 256, 639, 287),10,100));
+            _itemDictionary.Add("flail_balls", new Weapon(new Vector4(0, 288, 15, 319),10,100));
+            _itemDictionary.Add("flail_ball3", new Weapon(new Vector4(16, 288, 31, 319),10,100));
+            _itemDictionary.Add("flail_ball4", new Weapon(new Vector4(32, 288, 47, 319),10,100));
             _itemDictionary.Add("nunchaku", new Weapon(new Vector4(48, 288, 63, 319),10,100));
             _itemDictionary.Add("mace_of_variability", new Weapon(new Vector4(64, 288, 79, 319),10,100));
             _itemDictionary.Add("spear", new Weapon(new Vector4(80, 288, 95, 319),10,100));
