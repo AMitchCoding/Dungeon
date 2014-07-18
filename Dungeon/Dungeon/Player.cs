@@ -12,8 +12,8 @@ namespace Dungeon
     {
         Vector2 _location = new Vector2(0, 0);
         PlayerSpriteDictionary _playerSpriteSheet = new PlayerSpriteDictionary();
-        List<string> _playerSprite = new List<string>();
-        List<Armor> _playerArmor = new List<Armor>();
+        string _playerRace;
+        List<Item> _playerItems = new List<Item>();
         FOV fov;
         bool isAlive = true;
         bool nearMons = false;
@@ -23,10 +23,15 @@ namespace Dungeon
         {
             this.location = startPos.tilePos;
             startPos.sightBlocker = false;
-            this._playerSprite.Add("blue_cape");
-            this._playerSprite.Add("mummy_m");
-            this._playerSprite.Add("demon_trident");
-            this._playerArmor.Add(new Armor(_playerSpriteSheet.GetArmor("plate_black")));
+            this._playerRace = "mummy_m";
+            //this._playerSprite.Add("demon_trident");
+            //this._playerSprite.Add("blue_cape");
+
+            //this._playerItems.Add(new Item(_playerSpriteSheet.GetItem("plate_black")));
+            //this._playerItems.Add(new Item(_playerSpriteSheet.GetItem("short_red_shoes")));
+
+            //Determining Sprite offsets
+
             fov = new FOV(grid, this._location);
             fov.GetVisibility();
         }
@@ -178,13 +183,12 @@ namespace Dungeon
 
         internal void DrawPlayer(SpriteBatch spriteBatch, Texture2D tileTexture, Vector2 destination)
         {
-            foreach (string sprite in _playerSprite)
+            spriteBatch.Draw(tileTexture, destination, _playerSpriteSheet.GetSprite("shadow"), Color.White);
+            spriteBatch.Draw(tileTexture, destination, _playerSpriteSheet.GetSprite(_playerRace), Color.White);
+
+            foreach (Item item in _playerItems)
             {
-                spriteBatch.Draw(tileTexture, destination, _playerSpriteSheet.GetSprite(sprite), Color.White);
-            }
-            foreach (Armor armor in _playerArmor)
-            {
-                spriteBatch.Draw(tileTexture, new Vector2(destination.X + armor.offset.X,destination.Y + armor.offset.Y) , _playerSpriteSheet.GetSprite(armor.spriteLoc), Color.White);
+                spriteBatch.Draw(tileTexture, new Vector2(destination.X + item.offset.X,destination.Y + item.offset.Y) , _playerSpriteSheet.GetSprite(item.spriteLoc), Color.White);
             }
         }
     }

@@ -89,6 +89,7 @@
     <Compile Include="Armor.cs" />
     <Compile Include="Dungeon.cs" />
     <Compile Include="FOV.cs" />
+    <Compile Include="Item.cs" />
     <Compile Include="NPC.cs" />
     <Compile Include="NPCDictionary.cs" />
     <Compile Include="Player.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="Tile.cs" />
     <Compile Include="PlayerSpriteDictionary.cs" />
     <Compile Include="TileDictionary.cs" />
+    <Compile Include="Weapon.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

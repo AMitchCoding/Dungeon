@@ -37,6 +37,7 @@ namespace Dungeon
                 }
                 tile.scanned = false;
             }
+            _grid[(int)_location.X, (int)_location.Y].visible = true; 
 
         }
         /// <summary>

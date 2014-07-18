@@ -7,37 +7,37 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Dungeon
 {
-    class Armor : Item
+    class Weapon : Item
     {
-        int _defense;
+        int _attack;
         int _durability;
 
-        public Armor(Vector4 spriteLoc, Vector2 offset, int defense, int durability)
+        public Weapon(Vector4 spriteLoc, Vector2 offset, int attack, int durability)
         {
             this._spriteLoc = spriteLoc;
             this._offset = offset;
-            this._defense = defense;
+            this._attack = attack;
             this._durability = durability;
         }
-        public Armor(Vector4 spriteLoc, int defense, int durability)
+        public Weapon(Vector4 spriteLoc, int attack, int durability)
         {
             this._spriteLoc = spriteLoc;
-            this._defense = defense;
+            this._attack = attack;
             this._durability = durability;
         }
 
-        public Armor(Armor armor)
+        public Weapon(Weapon weapon)
         {
-            this._spriteLoc = armor.spriteLoc;
-            this._offset = armor.offset;
-            this._defense = armor.defense;
-            this._durability = armor.durability;
+            this._spriteLoc = weapon.spriteLoc;
+            this._offset = weapon.offset;
+            this._attack = weapon.attack;
+            this._durability = weapon.durability;
         }
 
-        public int defense
+        public int attack
         {
-            set { this._defense = value; }
-            get { return this._defense; }
+            set { this._attack = value; }
+            get { return this._attack; }
         }
 
         public int durability
