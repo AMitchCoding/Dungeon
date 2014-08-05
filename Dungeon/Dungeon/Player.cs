@@ -25,12 +25,11 @@ namespace Dungeon
                 {"main_hand", null},
                 {"off_hand", null}
             };
-        FOV fov;
         bool isAlive = true;
         bool nearMons = false;
         int health = 10;
 
-        public Player(Tile startPos, Tile[,] grid)
+        public Player(Tile startPos)
         {
             this.location = startPos.tilePos;
             startPos.sightBlocker = false;
@@ -43,9 +42,6 @@ namespace Dungeon
             this._playerItems["feet"] = new Item(_playerSpriteSheet.GetItem("short_brown_shoes"));
             this._playerItems["main_hand"] = new Item(_playerSpriteSheet.GetItem("spiked_flail"));
             this._playerItems["off_hand"] = new Item(_playerSpriteSheet.GetItem("book_white"));
-
-            fov = new FOV(grid, this._location);
-            fov.GetVisibility();
         }
         public Vector2 location
         {
@@ -71,8 +67,6 @@ namespace Dungeon
                     }
                     break;
             }
-            fov = new FOV(grid, this._location);
-            fov.GetVisibility();
         }
 
         public bool MovePlayer(Vector2 move, Tile[,] grid)

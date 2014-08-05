@@ -36,6 +36,7 @@ namespace Dungeon
         TimeSpan oldtime, time;
         bool held = false;
         bool repeat = false;
+        FOV fov;
 
         public Game1()
         {
@@ -57,7 +58,9 @@ namespace Dungeon
             // TODO: Add your initialization logic here
             level = new Dungeon(npcDicationary);
             dungeon.Add(level);
-            player = new Player(level.upStairs, level.grid);
+            player = new Player(level.upStairs);
+            fov = new FOV(level.grid, player.location);
+            fov.GetVisibility();
             base.Initialize();
         }
 
@@ -163,7 +166,7 @@ namespace Dungeon
                     level = new Dungeon(npcDicationary);
                     dungeon.Add(level);
                     currentdngn_floor = 0;
-                    player = new Player(level.upStairs, level.grid);
+                    player = new Player(level.upStairs);
                 }
             } 
             if (newState.IsKeyDown(Keys.Left) || newState.IsKeyDown(Keys.NumPad4))
@@ -189,6 +192,8 @@ namespace Dungeon
                         player.Movement(new Vector2(-1, 0), level.grid, moveType);
                         moveType = "one";
                     }
+                    fov = new FOV(level.grid, player.location);
+                    fov.GetVisibility();
                 }
             }
             if (newState.IsKeyDown(Keys.NumPad7))
@@ -214,6 +219,8 @@ namespace Dungeon
                         player.Movement(new Vector2(-1, -1), level.grid, moveType);
                         moveType = "one";
                     }
+                    fov = new FOV(level.grid, player.location);
+                    fov.GetVisibility();
                 }
             }
             if (newState.IsKeyDown(Keys.Up) || newState.IsKeyDown(Keys.NumPad8))
@@ -239,6 +246,8 @@ namespace Dungeon
                         player.Movement(new Vector2(0, -1), level.grid, moveType);
                         moveType = "one";
                     }
+                    fov = new FOV(level.grid, player.location);
+                    fov.GetVisibility();
                 }
             }
             if (newState.IsKeyDown(Keys.NumPad9))
@@ -264,6 +273,8 @@ namespace Dungeon
                         player.Movement(new Vector2(1, -1), level.grid, moveType);
                         moveType = "one";
                     }
+                    fov = new FOV(level.grid, player.location);
+                    fov.GetVisibility();
                 }
             }
             if (newState.IsKeyDown(Keys.Right) || newState.IsKeyDown(Keys.NumPad6))
@@ -289,6 +300,8 @@ namespace Dungeon
                         player.Movement(new Vector2(1, 0), level.grid, moveType);
                         moveType = "one";
                     }
+                    fov = new FOV(level.grid, player.location);
+                    fov.GetVisibility();
                 }
             }
             if (newState.IsKeyDown(Keys.NumPad3))
@@ -314,6 +327,8 @@ namespace Dungeon
                         player.Movement(new Vector2(1, 1), level.grid, moveType);
                         moveType = "one";
                     }
+                    fov = new FOV(level.grid, player.location);
+                    fov.GetVisibility();
                 }
             }
             if (newState.IsKeyDown(Keys.Down) || newState.IsKeyDown(Keys.NumPad2))
@@ -339,6 +354,8 @@ namespace Dungeon
                         player.Movement(new Vector2(0, 1), level.grid, moveType);
                         moveType = "one";
                     }
+                    fov = new FOV(level.grid, player.location);
+                    fov.GetVisibility();
                 }
             }
             if (newState.IsKeyDown(Keys.NumPad1))
@@ -364,6 +381,8 @@ namespace Dungeon
                         player.Movement(new Vector2(-1, 1), level.grid, moveType);
                         moveType = "one";
                     }
+                    fov = new FOV(level.grid, player.location);
+                    fov.GetVisibility();
                 }
             }
             if (newState.IsKeyDown(Keys.OemPeriod))
@@ -384,6 +403,8 @@ namespace Dungeon
                             level = dungeon[currentdngn_floor];
                         }
                         player.location = level.upStairs.tilePos;
+                        fov = new FOV(level.grid, player.location);
+                        fov.GetVisibility();
                     }
                 }
             }
@@ -398,6 +419,8 @@ namespace Dungeon
                             currentdngn_floor--;
                             level = dungeon[currentdngn_floor];
                             player.location = level.downStairs.tilePos;
+                            fov = new FOV(level.grid, player.location);
+                            fov.GetVisibility();
                         }
                     }
                 }
