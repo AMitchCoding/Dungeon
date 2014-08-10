@@ -37,6 +37,7 @@ namespace Dungeon
         bool held = false;
         bool repeat = false;
         FOV fov;
+        bool menu = false;
 
         public Game1()
         {
@@ -133,6 +134,28 @@ namespace Dungeon
             player.DrawPlayer(spriteBatch, playerSpriteSheet, player.location * 32);
 
             spriteBatch.End();
+
+            if (menu)
+            {
+                SpriteFont Font1;
+                Vector2 FontPos;
+                Font1 = Content.Load<SpriteFont>("Courier New");
+
+                GraphicsDevice.Clear(Color.Black);
+                spriteBatch.Begin();
+                    string output = "Inventory";
+                    FontPos = new Vector2(graphics.GraphicsDevice.Viewport.Width / 64, graphics.GraphicsDevice.Viewport.Height / 64);
+                    Vector2 FontOrigin = new Vector2(0, 0); // Find the center of the string
+                    spriteBatch.DrawString(Font1, output, FontPos, Color.SandyBrown, 0, FontOrigin, 1.0f, SpriteEffects.None, 0.5f);    // Draw the string
+                    FontOrigin.X = FontOrigin.X - (graphics.GraphicsDevice.Viewport.Width / 32);
+                    foreach (KeyValuePair<String,Item> item in player._playerItems)
+                    {
+                        output = item.Key; 
+                        FontOrigin.Y = FontOrigin.Y - (graphics.GraphicsDevice.Viewport.Height / 32);
+                        spriteBatch.DrawString(Font1, output, FontPos, Color.SandyBrown, 0, FontOrigin, 1.0f, SpriteEffects.None, 0.5f);    // Draw the string
+                    }
+                spriteBatch.End();
+            }
 
             base.Draw(gameTime);
         }
@@ -454,14 +477,22 @@ namespace Dungeon
                 }
             }
 
+            if (newState.IsKeyDown(Keys.I))
+            {
+                if (!oldState.IsKeyDown(Keys.I))
+                {
+                    //player.MoveTo(new Vector2(2,2),level.grid);
+                    menu = !menu;
+                }
+            }
+
             if (newState.IsKeyDown(Keys.X))
             {
                 if (!oldState.IsKeyDown(Keys.X))
                 {
-                    player.MoveTo(new Vector2(2,2),level.grid);
+                    player.MoveTo(new Vector2(12,12),level.grid);
                 }
             }
-
 
             // Update saved state.
             oldState = newState;

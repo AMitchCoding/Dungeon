@@ -14,7 +14,7 @@ namespace Dungeon
         PlayerSpriteDictionary _playerSpriteSheet = new PlayerSpriteDictionary();
         string _playerRace;
         //List<Item> _playerItems = new List<Item>();
-        Dictionary<String, Item> _playerItems = new Dictionary<String, Item>()
+        public Dictionary<String, Item> _playerItems = new Dictionary<String, Item>()
             {
                 {"head", null},
                 {"chest", null},
@@ -121,50 +121,95 @@ namespace Dungeon
             Tile currentTile = grid[(int)this._location.X, (int)this._location.Y];  //move from
 
             if (newTile.isWall){
+                Console.Write("Wall/NPC");
                 return false;
             }
 
-            List<Vector3> moves = new List<Vector3>();
+            int[,] board = new int[25, 25];             //Matrix for distance scores (originating from endpoint)
+            for (int i = 0; i < 25; i++){       //Initialize board (Probably a way to do it during array generation)
+                for (int j = 0; j < 25; j++){
+                    board[i,j] = 65535;
+                }
+            }
+            board[(int)moveTo.X, (int)moveTo.Y] = 0;    //Initialize ending location score
+            List<Vector3> moves = new List<Vector3>();  //X loc, Y loc, and distance score
             moves.Add(new Vector3(moveTo.X, moveTo.Y, 0));  // Add the end point first, build from there.
 
-            //Generate list of valid squares up to minimal distance
-            int ele = 0;
-            while (moves.Count > ele)
+            while (moves.Count > 0)
             {
-                int x = (int)moves[ele].X;
-                int y = (int)moves[ele].Y;
-                int z = (int)moves[ele].Z;
+                int x = (int)moves[0].X;
+                int y = (int)moves[0].Y;
+                int score = (int)moves[0].Z;
                 for (int i = -1; i < 2; i++)
                 {
                     for (int j = -1; j < 2; j++)
                     {
-                        if (i != 0 && j != 0 && !grid[x + i, y + j].isWall)  //Don't test current tile, walls, or living npcs
+                        if (!grid[x + i, y + j].isWall)  //Don't test current tile, walls, or living npcs
                         {
-                            int k = 0;
-                            while (k < moves.Count)
+                            if (score + 1 < board[x + i, y + j])
                             {
-                                if (moves[k].X == x && moves[k].Y == y && moves[k].Z >= z)  //Remove duplicate squares with higher costs
-                                {
-                                    moves.RemoveAt(k);
-                                }else{
-                                    k++;    //Only increment LCV if no removal occurred
-                                }
+                                board[x + i, y + j] = score + 1;
+                                moves.Add(new Vector3(x + i, y + j, score + 1));
                             }
-                            if (this._location.X == x + i && this._location.Y == y + i) //We've reached the start location, terminate loops
+                            if (x == (int)this._location.X && y == (int)this._location.Y)
                             {
-                                i = 2; 
-                                j = 2;
-                                break;
+                                moves.Clear();
                             }
-                            moves.Add(new Vector3(x + i, y + j, z + 1)); //Add to end of list
-                            
                         }
                     }
                 }
-                ele++;
+                if (moves.Count > 0)
+                {
+                    moves.RemoveAt(0);
+                }
             }
 
-            int best = 65535;   //Need randomly large value greater than worst case distance.
+            //Print score matrix (DEBUG)
+            /*for (int i = 0; i < 25; i++)
+            {
+                for (int j = 0; j < 25; j++)
+                {
+                    if (board[i, j] == 65535)
+                    {
+                        Console.Write("X ");
+                    }
+                    else { 
+                    Console.Write(board[i, j] + " ");
+                        }
+                }
+                Console.WriteLine();
+            }*/
+
+            Console.WriteLine((int)this._location.X + " " + (int)this._location.Y);
+            Console.WriteLine((int)moveTo.X + " " + (int)moveTo.Y);
+            Console.WriteLine(board[(int)this._location.X, (int)this._location.Y]);
+
+            /*int xLoc = (int)this._location.X;
+            int yLoc = (int)this._location.Y;
+            int distance = board[(int)this._location.X, (int)this._location.Y];
+            while (distance > 0)
+            {
+                for (int i = -1; i < 2; i++)
+                {
+                    for (int j = -1; j < 2; j++)
+                    {
+                        if (board[xLoc + i, yLoc + j] == distance - 1)
+                        {
+                            Console.WriteLine(xLoc + " " + yLoc);
+                            xLoc += i;
+                            yLoc += j;
+                            Console.WriteLine(xLoc + " " + yLoc);
+                            distance = board[xLoc + i, yLoc + j];
+                            Vector2 nextMove = new Vector2(i, j);
+                            Movement(nextMove, grid, "one");
+                            i = 2;
+                            j = 2;
+                        }
+                    }
+                }
+            }
+
+            /*int best = 65535;   //Need randomly large value greater than worst case distance.
             Vector2 nextMove = new Vector2(0,0);   //Perhaps return array of moves (doesn't currently draw moves)
             while(moves.Count > 0){
                 foreach (Vector3 move in moves){
@@ -178,7 +223,7 @@ namespace Dungeon
                     }
                 }
                 MovePlayer(nextMove, grid);
-            }
+            }*/
 
             return true;
         }
