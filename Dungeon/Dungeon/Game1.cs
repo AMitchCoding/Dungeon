@@ -190,6 +190,8 @@ namespace Dungeon
                     dungeon.Add(level);
                     currentdngn_floor = 0;
                     player = new Player(level.upStairs);
+                    fov = new FOV(level.grid, player.location);
+                    fov.GetVisibility();
                 }
             } 
             if (newState.IsKeyDown(Keys.Left) || newState.IsKeyDown(Keys.NumPad4))
