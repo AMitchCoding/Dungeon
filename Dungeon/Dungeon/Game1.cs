@@ -38,6 +38,7 @@ namespace Dungeon
         bool repeat = false;
         FOV fov;
         bool menu = false;
+        List<Vector2> moveToList = new List<Vector2>();
 
         public Game1()
         {
@@ -102,6 +103,15 @@ namespace Dungeon
             // TODO: Add your update logic here
             time = gameTime.TotalGameTime;
             UpdateInput();
+
+            if(moveToList.Count > 0)
+            {
+                player.MovePlayer(moveToList[0], level.grid);
+                moveToList.RemoveAt(0);
+                fov = new FOV(level.grid, player.location);
+                fov.GetVisibility();
+            }
+            
             foreach (NPC npc in level.npcs)
                 npc.npcStillAlive(level.grid);
 
@@ -492,7 +502,7 @@ namespace Dungeon
             {
                 if (!oldState.IsKeyDown(Keys.X))
                 {
-                    player.MoveTo(new Vector2(12,12),level.grid);
+                    moveToList = player.MoveTo(new Vector2(12,12),level.grid);
                 }
             }
 

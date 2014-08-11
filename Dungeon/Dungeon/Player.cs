@@ -115,14 +115,16 @@ namespace Dungeon
                 return false;
         }
 
-        public bool MoveTo(Vector2 moveTo, Tile[,] grid)
+        public List<Vector2> MoveTo(Vector2 moveTo, Tile[,] grid)
         {
             Tile newTile = grid[(int)moveTo.X, (int)moveTo.Y];  //move to
             Tile currentTile = grid[(int)this._location.X, (int)this._location.Y];  //move from
 
+            List<Vector2> moveList = new List<Vector2>(); //List of moves for player
+
             if (newTile.isWall){
                 Console.Write("Wall/NPC");
-                return false;
+                return moveList;
             }
 
             int[,] board = new int[25, 25];             //Matrix for distance scores (originating from endpoint)
@@ -154,6 +156,26 @@ namespace Dungeon
                             if (x == (int)this._location.X && y == (int)this._location.Y)
                             {
                                 moves.Clear();
+                                while (currentTile.tilePos != moveTo)
+                                {
+                                    int currPosScore = board[(int)currentTile.tilePos.X, (int)currentTile.tilePos.Y];
+                                    Vector2 move = new Vector2();
+                                    for (int m = -1; m < 2; m++)
+                                    {
+                                        for (int n = -1; n < 2; n++)
+                                        {
+                                            if (currPosScore - 1 == board[(int)currentTile.tilePos.X + m, (int)currentTile.tilePos.Y + n])
+                                            {
+                                                move.X = m;
+                                                move.Y = n;
+                                                moveList.Add(move);
+                                                currentTile = grid[(int)currentTile.tilePos.X + m, (int)currentTile.tilePos.Y + n];
+                                                m = 3;
+                                                n = 3;
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -183,6 +205,7 @@ namespace Dungeon
             Console.WriteLine((int)this._location.X + " " + (int)this._location.Y);
             Console.WriteLine((int)moveTo.X + " " + (int)moveTo.Y);
             Console.WriteLine(board[(int)this._location.X, (int)this._location.Y]);
+            Console.WriteLine(moves.Count);
 
             /*int xLoc = (int)this._location.X;
             int yLoc = (int)this._location.Y;
@@ -225,7 +248,7 @@ namespace Dungeon
                 MovePlayer(nextMove, grid);
             }*/
 
-            return true;
+            return moveList;
         }
 
         public void Kill()
