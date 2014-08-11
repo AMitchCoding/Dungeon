@@ -105,12 +105,16 @@ namespace Dungeon
             time = gameTime.TotalGameTime;
             UpdateInput();
 
-            if(moveToList.Count > 0 && !player.MonsterCheck(level.grid))  //Update postion here so it can be drawn
+            if(moveToList.Count > 0)// && !player.MonsterCheck(level.grid))  //Update postion here so it can be drawn
             {
                 player.MovePlayer(moveToList[0], level.grid);
                 moveToList.RemoveAt(0);
                 fov = new FOV(level.grid, player.location);
                 fov.GetVisibility();
+            }
+            if (player.MonsterCheck(level.grid))
+            {
+                moveToList.Clear();
             }
             
             foreach (NPC npc in level.npcs)
@@ -506,6 +510,14 @@ namespace Dungeon
                 if (!oldState.IsKeyDown(Keys.X))
                 {
                     moveToList = player.MoveTo(new Vector2(12,12),level.grid);
+                }
+            }
+
+            if (newState.IsKeyDown(Keys.Escape))
+            {
+                if (!oldState.IsKeyDown(Keys.Escape))
+                {
+                    Exit();
                 }
             }
 

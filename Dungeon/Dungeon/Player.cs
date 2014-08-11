@@ -131,12 +131,11 @@ namespace Dungeon
             List<Vector2> moveList = new List<Vector2>(); //List of moves for player
 
             if (newTile.isWall){
-                Console.Write("Wall/NPC");
                 return moveList;
             }
 
             int[,] board = new int[25, 25];             //Matrix for distance scores (originating from endpoint)
-            for (int i = 0; i < 25; i++){       //Initialize board (Probably a way to do it during array generation)
+            for (int i = 0; i < 25; i++){           //Initialize board (Probably a way to do it during array generation)
                 for (int j = 0; j < 25; j++){
                     board[i,j] = 65535;
                 }
@@ -164,26 +163,6 @@ namespace Dungeon
                             if (x == (int)this._location.X && y == (int)this._location.Y)
                             {
                                 moves.Clear();
-                                while (currentTile.tilePos != moveTo)
-                                {
-                                    int currPosScore = board[(int)currentTile.tilePos.X, (int)currentTile.tilePos.Y];
-                                    Vector2 move = new Vector2();
-                                    for (int m = -1; m < 2; m++)
-                                    {
-                                        for (int n = -1; n < 2; n++)
-                                        {
-                                            if (currPosScore - 1 == board[(int)currentTile.tilePos.X + m, (int)currentTile.tilePos.Y + n])
-                                            {
-                                                move.X = m;
-                                                move.Y = n;
-                                                moveList.Add(move);
-                                                currentTile = grid[(int)currentTile.tilePos.X + m, (int)currentTile.tilePos.Y + n];
-                                                m = 3;
-                                                n = 3;
-                                            }
-                                        }
-                                    }
-                                }
                             }
                         }
                     }
@@ -194,67 +173,30 @@ namespace Dungeon
                 }
             }
 
-            //Print score matrix (DEBUG)
-            /*for (int i = 0; i < 25; i++)
+            //Create move list, priority given to straight directional moves over diagonals
+            int[] dir = new int[] { 0, -1, 1 };
+            while (currentTile.tilePos != moveTo)
             {
-                for (int j = 0; j < 25; j++)
+                bool broke = false; //Sentinel for early exit
+                int currPosScore = board[(int)currentTile.tilePos.X, (int)currentTile.tilePos.Y];
+                Vector2 move = new Vector2();
+                foreach (int m in dir)
                 {
-                    if (board[i, j] == 65535)
+                    foreach (int n in dir)
                     {
-                        Console.Write("X ");
-                    }
-                    else { 
-                    Console.Write(board[i, j] + " ");
-                        }
-                }
-                Console.WriteLine();
-            }*/
-
-            /*Console.WriteLine((int)this._location.X + " " + (int)this._location.Y);
-            Console.WriteLine((int)moveTo.X + " " + (int)moveTo.Y);
-            Console.WriteLine(board[(int)this._location.X, (int)this._location.Y]);
-            Console.WriteLine(moves.Count);*/
-
-            /*int xLoc = (int)this._location.X;
-            int yLoc = (int)this._location.Y;
-            int distance = board[(int)this._location.X, (int)this._location.Y];
-            while (distance > 0)
-            {
-                for (int i = -1; i < 2; i++)
-                {
-                    for (int j = -1; j < 2; j++)
-                    {
-                        if (board[xLoc + i, yLoc + j] == distance - 1)
+                        if (currPosScore - 1 == board[(int)currentTile.tilePos.X + m, (int)currentTile.tilePos.Y + n])
                         {
-                            Console.WriteLine(xLoc + " " + yLoc);
-                            xLoc += i;
-                            yLoc += j;
-                            Console.WriteLine(xLoc + " " + yLoc);
-                            distance = board[xLoc + i, yLoc + j];
-                            Vector2 nextMove = new Vector2(i, j);
-                            Movement(nextMove, grid, "one");
-                            i = 2;
-                            j = 2;
+                            move.X = m;
+                            move.Y = n;
+                            moveList.Add(move);
+                            currentTile = grid[(int)currentTile.tilePos.X + m, (int)currentTile.tilePos.Y + n];
+                            broke = true;
+                            break;
                         }
                     }
+                    if (broke) { break; }   //Found move, look for next move
                 }
             }
-
-            /*int best = 65535;   //Need randomly large value greater than worst case distance.
-            Vector2 nextMove = new Vector2(0,0);   //Perhaps return array of moves (doesn't currently draw moves)
-            while(moves.Count > 0){
-                foreach (Vector3 move in moves){
-                    if ((2 > move.X - this._location.X && -2 < move.X - this._location.X) && (2 > move.Y - this._location.Y && -2 < move.Y - this._location.Y))
-                    {
-                        if (move.Z < best)
-                        {
-                            nextMove = new Vector2(move.X, move.Y);
-                            best = (int)move.Z;
-                        }
-                    }
-                }
-                MovePlayer(nextMove, grid);
-            }*/
 
             return moveList;
         }
