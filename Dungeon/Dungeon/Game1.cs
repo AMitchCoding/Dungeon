@@ -105,7 +105,7 @@ namespace Dungeon
             time = gameTime.TotalGameTime;
             UpdateInput();
 
-            if(moveToList.Count > 0)  //Update postion her so it can be drawn
+            if(moveToList.Count > 0 && !player.MonsterCheck(level.grid))  //Update postion here so it can be drawn
             {
                 player.MovePlayer(moveToList[0], level.grid);
                 moveToList.RemoveAt(0);
@@ -226,7 +226,7 @@ namespace Dungeon
                     }
                     else
                     {
-                        player.Movement(new Vector2(-1, 0), level.grid, moveType);
+                        moveToList = player.Movement(new Vector2(-1, 0), level.grid, moveType, moveToList);
                         moveType = "one";
                     }
                     fov = new FOV(level.grid, player.location);
@@ -253,7 +253,7 @@ namespace Dungeon
                     }
                     else
                     {
-                        player.Movement(new Vector2(-1, -1), level.grid, moveType);
+                        moveToList = player.Movement(new Vector2(-1, -1), level.grid, moveType, moveToList);
                         moveType = "one";
                     }
                     fov = new FOV(level.grid, player.location);
@@ -280,7 +280,7 @@ namespace Dungeon
                     }
                     else
                     {
-                        player.Movement(new Vector2(0, -1), level.grid, moveType);
+                        moveToList = player.Movement(new Vector2(0, -1), level.grid, moveType, moveToList);
                         moveType = "one";
                     }
                     fov = new FOV(level.grid, player.location);
@@ -307,7 +307,7 @@ namespace Dungeon
                     }
                     else
                     {
-                        player.Movement(new Vector2(1, -1), level.grid, moveType);
+                        moveToList = player.Movement(new Vector2(1, -1), level.grid, moveType, moveToList);
                         moveType = "one";
                     }
                     fov = new FOV(level.grid, player.location);
@@ -334,7 +334,7 @@ namespace Dungeon
                     }
                     else
                     {
-                        player.Movement(new Vector2(1, 0), level.grid, moveType);
+                        moveToList = player.Movement(new Vector2(1, 0), level.grid, moveType, moveToList);
                         moveType = "one";
                     }
                     fov = new FOV(level.grid, player.location);
@@ -361,7 +361,7 @@ namespace Dungeon
                     }
                     else
                     {
-                        player.Movement(new Vector2(1, 1), level.grid, moveType);
+                        moveToList = player.Movement(new Vector2(1, 1), level.grid, moveType, moveToList);
                         moveType = "one";
                     }
                     fov = new FOV(level.grid, player.location);
@@ -388,7 +388,7 @@ namespace Dungeon
                     }
                     else
                     {
-                        player.Movement(new Vector2(0, 1), level.grid, moveType);
+                        moveToList = player.Movement(new Vector2(0, 1), level.grid, moveType, moveToList);
                         moveType = "one";
                     }
                     fov = new FOV(level.grid, player.location);
@@ -415,7 +415,7 @@ namespace Dungeon
                     }
                     else
                     {
-                        player.Movement(new Vector2(-1, 1), level.grid, moveType);
+                        moveToList = player.Movement(new Vector2(-1, 1), level.grid, moveType, moveToList);
                         moveType = "one";
                     }
                     fov = new FOV(level.grid, player.location);
@@ -515,7 +515,13 @@ namespace Dungeon
                     Vector2 clickedTile = new Vector2();
                     clickedTile.X = newMouseState.X / 32;
                     clickedTile.Y = newMouseState.Y / 32;
-                    moveToList = player.MoveTo(clickedTile, level.grid);
+                    if (clickedTile.X >= 0 && clickedTile.X <= 24 &&
+                        clickedTile.Y >= 0 && clickedTile.Y <= 24 &&
+                        (level.grid[(int)clickedTile.X, (int)clickedTile.Y].seen ||
+                        level.grid[(int)clickedTile.X, (int)clickedTile.Y].visible))
+                    {
+                        moveToList = player.MoveTo(clickedTile, level.grid);
+                    }
                 }
             }
 

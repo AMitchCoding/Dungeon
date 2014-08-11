@@ -26,7 +26,7 @@ namespace Dungeon
                 {"off_hand", null}
             };
         bool isAlive = true;
-        bool nearMons = false;
+        bool _nearMons = false;
         int health = 10;
 
         public Player(Tile startPos)
@@ -43,30 +43,43 @@ namespace Dungeon
             this._playerItems["main_hand"] = new Item(_playerSpriteSheet.GetItem("spiked_flail"));
             this._playerItems["off_hand"] = new Item(_playerSpriteSheet.GetItem("book_white"));
         }
+        public bool nearMons
+        {
+            get { return this._nearMons; }
+        }
         public Vector2 location
         {
             set { this._location = value; }
             get { return this._location; }
         }
 
-        public void Movement(Vector2 move, Tile[,] grid, string type)
+        public List<Vector2> Movement(Vector2 move, Tile[,] grid, string type, List<Vector2> moveToList)
         {
+            Tile destTile = grid[(int)(this._location.X + move.X), (int)(this._location.Y + move.Y)];
+            int moveCount = 4;
+
             switch(type)
             {
                 case("one"):
                     MovePlayer(move, grid);
                     break;
                 case("end"):
-                    while (MovePlayer(move, grid) && !nearMons) ;
+                    while (!destTile.isWall)
+                    { 
+                        moveToList.Add(move);
+                        destTile = grid[(int)(destTile.tilePos.X + move.X), (int)(destTile.tilePos.Y + move.Y)];
+                    }
                     break;
                 case("five"):
-                    for(int x = 0; x < 5; x++ )
+                    while(!destTile.isWall && moveCount > 0)
                     {
-                        if (!MovePlayer(move, grid) || nearMons)
-                            break;
+                        moveToList.Add(move);
+                        destTile = grid[(int)(destTile.tilePos.X + move.X), (int)(destTile.tilePos.Y + move.Y)];
+                        moveCount--;
                     }
                     break;
             }
+            return moveToList;
         }
 
         public bool MovePlayer(Vector2 move, Tile[,] grid)
@@ -202,10 +215,10 @@ namespace Dungeon
                 Console.WriteLine();
             }*/
 
-            Console.WriteLine((int)this._location.X + " " + (int)this._location.Y);
+            /*Console.WriteLine((int)this._location.X + " " + (int)this._location.Y);
             Console.WriteLine((int)moveTo.X + " " + (int)moveTo.Y);
             Console.WriteLine(board[(int)this._location.X, (int)this._location.Y]);
-            Console.WriteLine(moves.Count);
+            Console.WriteLine(moves.Count);*/
 
             /*int xLoc = (int)this._location.X;
             int yLoc = (int)this._location.Y;
@@ -253,6 +266,37 @@ namespace Dungeon
 
         public void Kill()
         {
+        }
+
+        public bool MonsterCheck(Tile[,] grid)
+        {
+            Tile tile = null;
+            int minX = -5;
+            int minY = -5;
+            int maxX = 5;
+            int maxY = 5;
+
+            if (this._location.X <= 4)
+                minX = (int)this._location.X * -1;
+            if (this._location.Y <= 4)
+                minY = (int)this._location.Y * -1;
+            if (this._location.X >= 20)
+                maxX = 24 - (int)this._location.X;
+            if (this._location.Y >= 20)
+                maxY = 24 - (int)this._location.Y;
+
+            for (int i = minX; i <= maxX; i++)
+            {
+                for (int j = minY; j <= maxY; j++)
+                {
+                    tile = grid[(int)this._location.X + i, (int)this._location.Y + j];
+                    if (tile.npc != null && tile.visible)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         internal void DrawPlayer(SpriteBatch spriteBatch, Texture2D tileTexture, Vector2 destination)
