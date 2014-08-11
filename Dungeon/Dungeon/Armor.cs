@@ -19,9 +19,13 @@ namespace Dungeon
             this._defense = defense;
             this._durability = durability;
         }
-        public Armor(Vector4 spriteLoc, int defense, int durability)
+
+        //Testing item names
+        public Armor(Vector4 spriteLoc, Vector2 offset, int defense, int durability, string name)
         {
             this._spriteLoc = spriteLoc;
+            this._offset = offset;
+            this._name = name;
             this._defense = defense;
             this._durability = durability;
         }

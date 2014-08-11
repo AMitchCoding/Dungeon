@@ -12,6 +12,7 @@ namespace Dungeon
     {
         public Vector4 _spriteLoc = new Vector4();
         public Vector2 _offset = new Vector2(0,0);
+        public string _name;
 
         public Item()
         {
@@ -40,6 +41,12 @@ namespace Dungeon
         {
             set { this._offset = value; }
             get { return this._offset; }
+        }
+
+        public string name
+        {
+            set { this._name = value; }
+            get { return this._name; }
         }
     }
 }

@@ -26,7 +26,6 @@ namespace Dungeon
                 {"off_hand", null}
             };
         bool isAlive = true;
-        bool _nearMons = false;
         int health = 10;
 
         public Player(Tile startPos)
@@ -42,10 +41,6 @@ namespace Dungeon
             this._playerItems["feet"] = new Item(_playerSpriteSheet.GetItem("short_brown_shoes"));
             this._playerItems["main_hand"] = new Item(_playerSpriteSheet.GetItem("spiked_flail"));
             this._playerItems["off_hand"] = new Item(_playerSpriteSheet.GetItem("book_white"));
-        }
-        public bool nearMons
-        {
-            get { return this._nearMons; }
         }
         public Vector2 location
         {

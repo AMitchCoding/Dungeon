@@ -15,6 +15,7 @@ namespace Dungeon
         Vector2 OFFSET_X_16 = new Vector2(16, 0);
         Vector2 OFFSET_Y_8 = new Vector2(0, 8);
         Vector2 OFFSET_Y_16 = new Vector2(0,16);
+        Vector2 OFFSET_0 = new Vector2(0, 0);
 
         public PlayerSpriteDictionary()
         {
@@ -70,16 +71,16 @@ namespace Dungeon
             _characters.Add("shadow", new Vector4(128, 64, 159, 95));
 
             //Back
-            _itemDictionary.Add("red_cape", new Armor(new Vector4(160, 64, 191, 95), 10, 100));
-            _itemDictionary.Add("blue_cape", new Armor(new Vector4(192, 64, 223, 95), 10, 100));
-            _itemDictionary.Add("magenta_cape", new Armor(new Vector4(224, 64, 255, 95), 10, 100));
-            _itemDictionary.Add("yellow_cape", new Armor(new Vector4(256, 64, 287, 95), 10, 100));
-            _itemDictionary.Add("black_cape", new Armor(new Vector4(288, 64, 319, 95), 10, 100));
-            _itemDictionary.Add("gray_cape", new Armor(new Vector4(320, 64, 351, 95), 10, 100));
-            _itemDictionary.Add("lbrown_cape", new Armor(new Vector4(352, 64, 383, 95), 10, 100));
-            _itemDictionary.Add("green_cape", new Armor(new Vector4(384, 64, 415, 95), 10, 100));
-            _itemDictionary.Add("cyan_cape", new Armor(new Vector4(416, 64, 447, 95), 10, 100));
-            _itemDictionary.Add("white_cape", new Armor(new Vector4(448, 64, 479, 95), 10, 100));
+            _itemDictionary.Add("red_cape", new Armor(new Vector4(160, 64, 191, 95), OFFSET_0, 10, 100));
+            _itemDictionary.Add("blue_cape", new Armor(new Vector4(192, 64, 223, 95), OFFSET_0, 10, 100, "Cloak"));
+            _itemDictionary.Add("magenta_cape", new Armor(new Vector4(224, 64, 255, 95), OFFSET_0, 10, 100));
+            _itemDictionary.Add("yellow_cape", new Armor(new Vector4(256, 64, 287, 95), OFFSET_0, 10, 100));
+            _itemDictionary.Add("black_cape", new Armor(new Vector4(288, 64, 319, 95), OFFSET_0, 10, 100));
+            _itemDictionary.Add("gray_cape", new Armor(new Vector4(320, 64, 351, 95), OFFSET_0, 10, 100));
+            _itemDictionary.Add("lbrown_cape", new Armor(new Vector4(352, 64, 383, 95), OFFSET_0, 10, 100));
+            _itemDictionary.Add("green_cape", new Armor(new Vector4(384, 64, 415, 95), OFFSET_0, 10, 100));
+            _itemDictionary.Add("cyan_cape", new Armor(new Vector4(416, 64, 447, 95), OFFSET_0, 10, 100));
+            _itemDictionary.Add("white_cape", new Armor(new Vector4(448, 64, 479, 95), OFFSET_0, 10, 100));
 
             //Feet
             _itemDictionary.Add("short_red_shoes", new Armor(new Vector4(480, 64, 511, 79), OFFSET_Y_16, 10, 100));
@@ -193,7 +194,7 @@ namespace Dungeon
             _itemDictionary.Add("shirt_black_and_cloth", new Armor(new Vector4(240, 160, 255, 191), OFFSET_X_8, 10, 100));
             _itemDictionary.Add("shirt_black3", new Armor(new Vector4(256, 160, 271, 191), OFFSET_X_8, 10, 100));
             _itemDictionary.Add("leather2", new Armor(new Vector4(272, 160, 287, 191), OFFSET_X_8, 10, 100));
-            _itemDictionary.Add("chainmail3", new Armor(new Vector4(288, 160, 303, 191), OFFSET_X_8, 10, 100));
+            _itemDictionary.Add("chainmail3", new Armor(new Vector4(288, 160, 303, 191), OFFSET_X_8, 10, 100, "Chainmail"));
             _itemDictionary.Add("shirt_vest", new Armor(new Vector4(304, 160, 319, 191), OFFSET_X_8, 10, 100));
             _itemDictionary.Add("karate", new Armor(new Vector4(320, 160, 335, 191), OFFSET_X_8, 10, 100));
             _itemDictionary.Add("karate2", new Armor(new Vector4(336, 160, 351, 191), OFFSET_X_8, 10, 100));
@@ -331,7 +332,7 @@ namespace Dungeon
             _itemDictionary.Add("fhelm_gray3", new Armor(new Vector4(208, 464, 223, 479),OFFSET_X_8, 10, 100));
             _itemDictionary.Add("fhelm_horn_yellow", new Armor(new Vector4(224, 448, 239, 463),OFFSET_X_8, 10, 100));
             _itemDictionary.Add("fhelm_horn2", new Armor(new Vector4(240, 448, 255, 463),OFFSET_X_8, 10, 100));
-            _itemDictionary.Add("fhelm_evil", new Armor(new Vector4(224, 464, 239, 479),OFFSET_X_8, 10, 100));
+            _itemDictionary.Add("fhelm_evil", new Armor(new Vector4(224, 464, 239, 479),OFFSET_X_8, 10, 100, "Full Helm"));
             _itemDictionary.Add("fhelm_plume", new Armor(new Vector4(240, 464, 255, 479),OFFSET_X_8, 10, 100));
             _itemDictionary.Add("fhelm_mummy", new Armor(new Vector4(256, 448, 271, 463),OFFSET_X_8, 10, 100));
             _itemDictionary.Add("art_dragonhelm", new Armor(new Vector4(272, 448, 287, 463),OFFSET_X_8, 10, 100));
