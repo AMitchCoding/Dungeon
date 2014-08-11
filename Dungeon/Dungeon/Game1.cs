@@ -27,6 +27,7 @@ namespace Dungeon
         List<Dungeon> dungeon = new List<Dungeon>();
         Player player = null;
         KeyboardState oldState = new KeyboardState();
+        MouseState oldMouseState = new MouseState();
         TileDictionary tileDictionary = new TileDictionary();
         NPCDictionary npcDicationary = new NPCDictionary();
         int currentdngn_floor = 0;
@@ -104,7 +105,7 @@ namespace Dungeon
             time = gameTime.TotalGameTime;
             UpdateInput();
 
-            if(moveToList.Count > 0)
+            if(moveToList.Count > 0)  //Update postion her so it can be drawn
             {
                 player.MovePlayer(moveToList[0], level.grid);
                 moveToList.RemoveAt(0);
@@ -173,6 +174,7 @@ namespace Dungeon
         private void UpdateInput()
         {
             KeyboardState newState = Keyboard.GetState();
+            MouseState newMouseState = Mouse.GetState();
 
             //Checks if the same key has been held for a period of time. 
             if(newState.Equals(oldState)){
@@ -506,8 +508,20 @@ namespace Dungeon
                 }
             }
 
+            if (newMouseState.LeftButton == ButtonState.Pressed)
+            {
+                if (oldMouseState.LeftButton != ButtonState.Pressed)
+                {
+                    Vector2 clickedTile = new Vector2();
+                    clickedTile.X = newMouseState.X / 32;
+                    clickedTile.Y = newMouseState.Y / 32;
+                    moveToList = player.MoveTo(clickedTile, level.grid);
+                }
+            }
+
             // Update saved state.
             oldState = newState;
+            oldMouseState = newMouseState;
         }
     }
 }
