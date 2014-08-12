@@ -41,12 +41,18 @@ namespace Dungeon
         bool menu = false;
         List<Vector2> moveToList = new List<Vector2>();
 
+        Texture2D border;
+        Log log = new Log();
+        SpriteFont Font1;
+        Vector2 FontPos;
+        bool enemyDetected = false;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            graphics.PreferredBackBufferHeight = 800;
+            graphics.PreferredBackBufferHeight = 1000;
             graphics.PreferredBackBufferWidth = 800;
         }
 
@@ -79,6 +85,8 @@ namespace Dungeon
             // TODO: use this.Content to load your game content here
             tileTexture = this.Content.Load<Texture2D>("tile");
             playerSpriteSheet = this.Content.Load<Texture2D>("player");
+            border = this.Content.Load<Texture2D>("border");
+
         }
 
         /// <summary>
@@ -103,20 +111,41 @@ namespace Dungeon
 
             // TODO: Add your update logic here
             time = gameTime.TotalGameTime;
-            UpdateInput();
 
-            if(moveToList.Count > 0)// && !player.MonsterCheck(level.grid))  //Update postion here so it can be drawn
+            if (!menu)
+            {
+                UpdateInput();
+            }
+            else
+            {
+                MenuInput();
+            }
+
+            if(moveToList.Count > 0)        //Update postion here so it can be drawn
             {
                 player.MovePlayer(moveToList[0], level.grid);
                 moveToList.RemoveAt(0);
                 fov = new FOV(level.grid, player.location);
                 fov.GetVisibility();
+                if (player.MonsterCheck(level.grid) && moveToList.Count > 0)
+                {
+                    if (!enemyDetected)
+                    {
+                        log.Write("Enemy detected! Auto-travel has stopped.");
+                    }
+                    moveToList.Clear();
+                    enemyDetected = true;
+                }
             }
-            if (player.MonsterCheck(level.grid))
+            if (!player.MonsterCheck(level.grid))
             {
-                moveToList.Clear();
+                enemyDetected = false;
             }
-            
+            else
+            {
+                enemyDetected = true;
+            }
+
             foreach (NPC npc in level.npcs)
                 npc.npcStillAlive(level.grid);
 
@@ -132,44 +161,56 @@ namespace Dungeon
         {
             GraphicsDevice.Clear(Color.Black);
 
-            // TODO: Add your drawing code here
-            spriteBatch.Begin();
-            for (int x = 0; x < 25; x++)
+            if (!menu)
             {
-                for (int y = 0; y < 25; y++)
+                // TODO: Add your drawing code here
+                spriteBatch.Begin();
+                for (int x = 0; x < 25; x++)
                 {
-                    destination = new Vector2(x * 32, y * 32);
-                    level.grid[x, y].DrawTile(spriteBatch, tileTexture, destination, tileDictionary);
-                    if(level.grid[x, y].npc != null)
-                        level.grid[x, y].npc.DrawNPC(spriteBatch, tileTexture);
-                    level.grid[x, y].DrawTileVisibility(spriteBatch, tileTexture, destination, tileDictionary);
+                    for (int y = 0; y < 25; y++)
+                    {
+                        destination = new Vector2(x * 32, y * 32);
+                        level.grid[x, y].DrawTile(spriteBatch, tileTexture, destination, tileDictionary);
+                        if (level.grid[x, y].npc != null)
+                            level.grid[x, y].npc.DrawNPC(spriteBatch, tileTexture);
+                        level.grid[x, y].DrawTileVisibility(spriteBatch, tileTexture, destination, tileDictionary);
+                    }
                 }
+
+                player.DrawPlayer(spriteBatch, playerSpriteSheet, player.location * 32);
+
+                //Log setup and print
+                spriteBatch.Draw(border, new Vector2(0, 800), Color.White);
+                Font1 = Content.Load<SpriteFont>("Courier New");
+                Vector2 fontPos = new Vector2(10, 815);
+                List<String> output = log.GetLines(7);
+                foreach (String line in output)
+                {
+                    spriteBatch.DrawString(Font1, line, fontPos, Color.White);
+                    fontPos.Y += 20;
+                }
+
+                spriteBatch.End();
             }
-
-            player.DrawPlayer(spriteBatch, playerSpriteSheet, player.location * 32);
-
-            spriteBatch.End();
-
-            if (menu)
+            else    //Menu stuff
             {
-                SpriteFont Font1;
-                Vector2 FontPos;
+
                 Font1 = Content.Load<SpriteFont>("Courier New");
 
-                GraphicsDevice.Clear(Color.Black);
+                //GraphicsDevice.Clear(Color.Black);
                 spriteBatch.Begin();
-                    string output = "Inventory";
-                    FontPos = new Vector2(graphics.GraphicsDevice.Viewport.Width / 64, graphics.GraphicsDevice.Viewport.Height / 64);
-                    Vector2 FontOrigin = new Vector2(0, 0); // Find the center of the string
+                string output = "Inventory";
+                FontPos = new Vector2(graphics.GraphicsDevice.Viewport.Width / 64, graphics.GraphicsDevice.Viewport.Height / 64);
+                Vector2 FontOrigin = new Vector2(0, 0); // Find the center of the string
+                spriteBatch.DrawString(Font1, output, FontPos, Color.SandyBrown, 0, FontOrigin, 1.0f, SpriteEffects.None, 0.5f);    // Draw the string
+                FontOrigin.X = FontOrigin.X - (graphics.GraphicsDevice.Viewport.Width / 32);
+                foreach (KeyValuePair<String, Item> item in player._playerItems)
+                {
+                    output = item.Key;
+                    output += player._playerItems[output].name; //Testing adding item names
+                    FontOrigin.Y = FontOrigin.Y - (graphics.GraphicsDevice.Viewport.Height / 32);
                     spriteBatch.DrawString(Font1, output, FontPos, Color.SandyBrown, 0, FontOrigin, 1.0f, SpriteEffects.None, 0.5f);    // Draw the string
-                    FontOrigin.X = FontOrigin.X - (graphics.GraphicsDevice.Viewport.Width / 32);
-                    foreach (KeyValuePair<String,Item> item in player._playerItems)
-                    {
-                        output = item.Key;
-                        output += player._playerItems[output].name; //Testing adding item names
-                        FontOrigin.Y = FontOrigin.Y - (graphics.GraphicsDevice.Viewport.Height / 32);
-                        spriteBatch.DrawString(Font1, output, FontPos, Color.SandyBrown, 0, FontOrigin, 1.0f, SpriteEffects.None, 0.5f);    // Draw the string
-                    }
+                }
                 spriteBatch.End();
             }
 
@@ -209,6 +250,7 @@ namespace Dungeon
                     player = new Player(level.upStairs);
                     fov = new FOV(level.grid, player.location);
                     fov.GetVisibility();
+                    log.Write("New floor generated.");
                 }
             } 
             if (newState.IsKeyDown(Keys.Left) || newState.IsKeyDown(Keys.NumPad4))
@@ -472,6 +514,7 @@ namespace Dungeon
                 if (!oldState.IsKeyDown(Keys.C))
                 {
                     doorWait = "close";
+                    log.Write("Close which door?");
                 }
             }
             if (newState.IsKeyDown(Keys.O))
@@ -479,6 +522,7 @@ namespace Dungeon
                 if (!oldState.IsKeyDown(Keys.O))
                 {
                     doorWait = "open";
+                    log.Write("Open which door?");
                 }
             }
             if (newState.IsKeyDown(Keys.Divide))
@@ -500,7 +544,6 @@ namespace Dungeon
             {
                 if (!oldState.IsKeyDown(Keys.I))
                 {
-                    //player.MoveTo(new Vector2(2,2),level.grid);
                     menu = !menu;
                 }
             }
@@ -518,6 +561,14 @@ namespace Dungeon
                 if (!oldState.IsKeyDown(Keys.Escape))
                 {
                     Exit();
+                }
+            }
+
+            if (newState.IsKeyDown(Keys.Enter))
+            {
+                if (!oldState.IsKeyDown(Keys.Enter))
+                {
+                    log.Write("Test message!");
                 }
             }
 
@@ -539,6 +590,32 @@ namespace Dungeon
             }
 
             // Update saved state.
+            oldState = newState;
+            oldMouseState = newMouseState;
+        }
+
+        private void MenuInput()
+        {
+
+            KeyboardState newState = Keyboard.GetState();
+            MouseState newMouseState = Mouse.GetState();
+
+            if (newState.IsKeyDown(Keys.I))
+            {
+                if (!oldState.IsKeyDown(Keys.I))
+                {
+                    menu = !menu;
+                }
+            }
+
+            if (newState.IsKeyDown(Keys.Escape))
+            {
+                if (!oldState.IsKeyDown(Keys.Escape))
+                {
+                    Exit();
+                }
+            }
+
             oldState = newState;
             oldMouseState = newMouseState;
         }

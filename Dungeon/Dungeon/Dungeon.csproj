@@ -87,6 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Armor.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="Dungeon.cs" />
     <Compile Include="FOV.cs" />
     <Compile Include="Item.cs" />
