@@ -7,20 +7,22 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Dungeon
 {
-    class NPC
+    class NPC : Entity
     {
         Vector2 _tile = new Vector2();
         Vector2 _location = new Vector2();
         int _health;
-        int _attack;
         int _defense;
+        int _strength;
+        int _dexterity;
+        int _intelligence;
         int _difficulty;
         string _corpse;
         public NPC(Vector2 tile, int health, int attack, int defense, int difficulty, string corpse)
         {
             this._tile = tile;
             this._health = health;
-            this._attack = attack;
+            this._baseAttack = attack;
             this._defense = defense;
             this._difficulty = difficulty;
             this._corpse = corpse;
@@ -30,7 +32,7 @@ namespace Dungeon
         {
             this._tile = npc.tile;
             this._health = npc.health;
-            this._attack = npc.attack;
+            this._baseAttack = npc.attack;
             this._defense = npc.defense;
             this._difficulty = npc.difficulty;
             this._corpse = npc.corpse;
@@ -55,7 +57,7 @@ namespace Dungeon
 
         public int attack
         {
-            get { return this._attack; }
+            get { return this._baseAttack; }
         }
 
         public int defense
