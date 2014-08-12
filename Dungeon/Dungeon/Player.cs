@@ -13,6 +13,7 @@ namespace Dungeon
         Vector2 _location = new Vector2(0, 0);
         PlayerSpriteDictionary _playerSpriteSheet = new PlayerSpriteDictionary();
         string _playerRace;
+        Log _playerLog;
         //List<Item> _playerItems = new List<Item>();
         public Dictionary<String, Item> _playerItems = new Dictionary<String, Item>()
             {
@@ -28,11 +29,13 @@ namespace Dungeon
         bool isAlive = true;
         int health = 10;
 
-        public Player(Tile startPos)
+        public Player(Tile startPos, ref Log playerLog)
         {
             this.location = startPos.tilePos;
             startPos.sightBlocker = false;
             this._playerRace = "mummy_m";
+            this._playerLog = playerLog;
+            this._playerLog.Write("I come from the player!");
             this._playerItems["head"] = new Item(_playerSpriteSheet.GetItem("fhelm_evil"));
             this._playerItems["chest"] = new Item(_playerSpriteSheet.GetItem("chainmail3"));
             this._playerItems["back"] = new Item(_playerSpriteSheet.GetItem("blue_cape"));

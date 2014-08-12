@@ -29,6 +29,7 @@ namespace Dungeon
         {
             this._spriteLoc = item.spriteLoc;
             this._offset = item.offset;
+            this._name = item.name;
         }
 
         public Vector4 spriteLoc

@@ -67,7 +67,7 @@ namespace Dungeon
             // TODO: Add your initialization logic here
             level = new Dungeon(npcDicationary);
             dungeon.Add(level);
-            player = new Player(level.upStairs);
+            player = new Player(level.upStairs, ref log);
             fov = new FOV(level.grid, player.location);
             fov.GetVisibility();
             base.Initialize();
@@ -207,7 +207,7 @@ namespace Dungeon
                 foreach (KeyValuePair<String, Item> item in player._playerItems)
                 {
                     output = item.Key;
-                    output += player._playerItems[output].name; //Testing adding item names
+                    output += ": " + player._playerItems[output].name; //Testing adding item names
                     FontOrigin.Y = FontOrigin.Y - (graphics.GraphicsDevice.Viewport.Height / 32);
                     spriteBatch.DrawString(Font1, output, FontPos, Color.SandyBrown, 0, FontOrigin, 1.0f, SpriteEffects.None, 0.5f);    // Draw the string
                 }
@@ -247,7 +247,7 @@ namespace Dungeon
                     level = new Dungeon(npcDicationary);
                     dungeon.Add(level);
                     currentdngn_floor = 0;
-                    player = new Player(level.upStairs);
+                    player = new Player(level.upStairs, ref log);
                     fov = new FOV(level.grid, player.location);
                     fov.GetVisibility();
                     log.Write("New floor generated.");
