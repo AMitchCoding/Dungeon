@@ -59,7 +59,7 @@ namespace Dungeon
         public static void DrawLog(SpriteBatch spriteBatch, SpriteFont font)
         {
             fontPos = new Vector2(10, 815);
-            foreach (String line in log)
+            foreach (String line in GetLines(8))
             {
                 spriteBatch.DrawString(font, line, fontPos, Color.White);
                 fontPos.Y += 20;
