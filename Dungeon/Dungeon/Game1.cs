@@ -42,7 +42,6 @@ namespace Dungeon
         List<Vector2> moveToList = new List<Vector2>();
 
         Texture2D border;
-        Log log = new Log();
         SpriteFont Font1;
         Vector2 FontPos;
         bool enemyDetected = false;
@@ -65,9 +64,10 @@ namespace Dungeon
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            Log.Write("Welcome to the dungeon!");
             level = new Dungeon(npcDicationary);
             dungeon.Add(level);
-            player = new Player(level.upStairs, log);
+            player = new Player(level.upStairs);
             fov = new FOV(level.grid, player.location);
             fov.GetVisibility();
             base.Initialize();
@@ -131,7 +131,7 @@ namespace Dungeon
                 {
                     if (!enemyDetected)
                     {
-                        log.Write("Enemy detected! Auto-travel has stopped.");
+                        Log.Write("Enemy detected! Auto-travel has stopped.");
                     }
                     moveToList.Clear();
                     enemyDetected = true;
@@ -183,7 +183,7 @@ namespace Dungeon
                 spriteBatch.Draw(border, new Vector2(0, 800), Color.White);
                 Font1 = Content.Load<SpriteFont>("Courier New");
                 Vector2 fontPos = new Vector2(10, 815);
-                List<String> output = log.GetLines(7);
+                List<String> output = Log.GetLines(7);
                 foreach (String line in output)
                 {
                     spriteBatch.DrawString(Font1, line, fontPos, Color.White);
@@ -247,10 +247,10 @@ namespace Dungeon
                     level = new Dungeon(npcDicationary);
                     dungeon.Add(level);
                     currentdngn_floor = 0;
-                    player = new Player(level.upStairs, log);
+                    player = new Player(level.upStairs);
                     fov = new FOV(level.grid, player.location);
                     fov.GetVisibility();
-                    log.Write("New floor generated.");
+                    Log.Write("New floor generated.");
                 }
             } 
             if (newState.IsKeyDown(Keys.Left) || newState.IsKeyDown(Keys.NumPad4))
@@ -514,7 +514,7 @@ namespace Dungeon
                 if (!oldState.IsKeyDown(Keys.C))
                 {
                     doorWait = "close";
-                    log.Write("Close which door?");
+                    Log.Write("Close which door?");
                 }
             }
             if (newState.IsKeyDown(Keys.O))
@@ -522,7 +522,7 @@ namespace Dungeon
                 if (!oldState.IsKeyDown(Keys.O))
                 {
                     doorWait = "open";
-                    log.Write("Open which door?");
+                    Log.Write("Open which door?");
                 }
             }
             if (newState.IsKeyDown(Keys.Divide))
@@ -568,7 +568,7 @@ namespace Dungeon
             {
                 if (!oldState.IsKeyDown(Keys.Enter))
                 {
-                    log.Write("Test message!");
+                    Log.Write("Test message!");
                 }
             }
 

@@ -13,17 +13,15 @@ namespace Dungeon
         Vector2 _location = new Vector2(0, 0);
         PlayerSpriteDictionary _playerSpriteSheet = new PlayerSpriteDictionary();
         string _playerRace;
-        Log _playerLog;
-
-        public Player(Tile startPos, Log playerLog)
+        
+        public Player(Tile startPos)
         {
 
             this.location = startPos.tilePos;
             startPos.sightBlocker = false;
             this._playerRace = "mummy_m";
 
-            this._playerLog = playerLog;
-            this._playerLog.Write("I come from the player!");
+            Log.Write("I come from the player!");
 
             this._entityItems["head"] = new Item(_playerSpriteSheet.GetItem("fhelm_evil"));
             this._entityItems["chest"] = new Item(_playerSpriteSheet.GetItem("chainmail3"));

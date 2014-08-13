@@ -5,30 +5,24 @@ using System.Text;
 
 namespace Dungeon
 {
-    class Log
+    static class Log
     {
 
-        private List<String> log;
+        private static List<String> log = new List<String>();
 
-        public Log()
-        {
-            log = new List<String>();
-            log.Add("Welcome to the dungeon! Nice shirt!");
-        }
-
-        public void Write(String message)
+        public static void Write(String message)
         {
             log.Add(message);
         }
 
-        public void WriteLines(String[] messages)
+        public static void WriteLines(String[] messages)
         {
             foreach(String message in messages){
                 log.Add(message);
             }
         }
 
-        public void WriteLines(List<String> messages)
+        public static void WriteLines(List<String> messages)
         {
             foreach (String message in messages)
             {
@@ -36,17 +30,17 @@ namespace Dungeon
             }
         }
 
-        public int Size()
+        public static int Size()
         {
             return log.Count;
         }
 
-        public void Clear()
+        public static void Clear()
         {
             log.Clear();
         }
 
-        public List<String> GetLines(int numLines)
+        public static List<String> GetLines(int numLines)
         {
 
             if (numLines < log.Count)
