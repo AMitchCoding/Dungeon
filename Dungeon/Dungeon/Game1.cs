@@ -85,6 +85,7 @@ namespace Dungeon
             // TODO: use this.Content to load your game content here
             tileTexture = this.Content.Load<Texture2D>("tile");
             playerSpriteSheet = this.Content.Load<Texture2D>("player");
+            Font1 = Content.Load<SpriteFont>("Courier New");
             border = this.Content.Load<Texture2D>("border");
 
         }
@@ -178,24 +179,23 @@ namespace Dungeon
                 }
 
                 player.DrawPlayer(spriteBatch, playerSpriteSheet, player.location * 32);
+                spriteBatch.Draw(border, new Vector2(0, 800), Color.White);
+                Log.DrawLog(spriteBatch, Font1);
 
                 //Log setup and print
-                spriteBatch.Draw(border, new Vector2(0, 800), Color.White);
-                Font1 = Content.Load<SpriteFont>("Courier New");
+                /*spriteBatch.Draw(border, new Vector2(0, 800), Color.White);
                 Vector2 fontPos = new Vector2(10, 815);
                 List<String> output = Log.GetLines(7);
                 foreach (String line in output)
                 {
                     spriteBatch.DrawString(Font1, line, fontPos, Color.White);
                     fontPos.Y += 20;
-                }
+                }*/
 
                 spriteBatch.End();
             }
             else    //Menu stuff
             {
-
-                Font1 = Content.Load<SpriteFont>("Courier New");
 
                 //GraphicsDevice.Clear(Color.Black);
                 spriteBatch.Begin();

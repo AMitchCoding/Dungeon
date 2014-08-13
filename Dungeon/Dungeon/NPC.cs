@@ -10,30 +10,36 @@ namespace Dungeon
     class NPC : Entity
     {
         Vector2 _tile = new Vector2();
-        Vector2 _location = new Vector2();
-        int _health;
-        int _defense;
-        int _strength;
-        int _dexterity;
-        int _intelligence;
         int _difficulty;
         string _corpse;
-        public NPC(Vector2 tile, int health, int attack, int defense, int difficulty, string corpse)
+        public NPC(Vector2 tile, int health, int attack, int baseDefense, int difficulty, string corpse)
         {
             this._tile = tile;
             this._health = health;
             this._baseAttack = attack;
-            this._defense = defense;
+            this._baseDefense = baseDefense;
             this._difficulty = difficulty;
             this._corpse = corpse;
+        }
+
+        public NPC(Vector2 tile, int health, int attack, int baseDefense, int difficulty, string corpse, string name)
+        {
+            this._tile = tile;
+            this._health = health;
+            this._baseAttack = attack;
+            this._baseDefense = baseDefense;
+            this._difficulty = difficulty;
+            this._corpse = corpse;
+            this._name = name;
         }
 
         public NPC(NPC npc)
         {
             this._tile = npc.tile;
+            this._name = npc.name;
             this._health = npc.health;
             this._baseAttack = npc.attack;
-            this._defense = npc.defense;
+            this._baseDefense = npc.baseDefense;
             this._difficulty = npc.difficulty;
             this._corpse = npc.corpse;
         }
@@ -49,20 +55,14 @@ namespace Dungeon
             get { return this._location; }
         }
 
-        public int health
-        {
-            set { this._health = value; }
-            get { return this._health; }
-        }
-
         public int attack
         {
             get { return this._baseAttack; }
         }
 
-        public int defense
+        public int baseDefense
         {
-            get { return this._defense; }
+            get { return this._baseDefense; }
         }
 
         public int difficulty

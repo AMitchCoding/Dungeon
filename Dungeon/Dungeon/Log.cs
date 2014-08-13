@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Dungeon
 {
@@ -9,6 +11,7 @@ namespace Dungeon
     {
 
         private static List<String> log = new List<String>();
+        private static Vector2 fontPos;
 
         public static void Write(String message)
         {
@@ -53,5 +56,14 @@ namespace Dungeon
             }
         }
 
+        public static void DrawLog(SpriteBatch spriteBatch, SpriteFont font)
+        {
+            fontPos = new Vector2(10, 815);
+            foreach (String line in log)
+            {
+                spriteBatch.DrawString(font, line, fontPos, Color.White);
+                fontPos.Y += 20;
+            }
+        }
     }
 }

@@ -11,8 +11,10 @@ namespace Dungeon
     {
         public static void Fight(Entity combatant1, Entity combatant2)
         {
-            combatant1._health -= combatant2.GetDamage();
-            combatant2._health -= combatant1.GetDamage();
+            combatant1.health -= combatant2.GetDamage();
+            Log.Write("Combatant1 HP: " + combatant1.health);
+            combatant2.health -= combatant1.GetDamage();
+            Log.Write("Combatant2 HP: " + combatant2.health);
         }
     }
 }

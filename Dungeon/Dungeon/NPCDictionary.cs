@@ -13,14 +13,14 @@ namespace Dungeon
         public NPCDictionary()
         {
 
-            // NPC ( location x, location y, health, attack, defense, difficulty, death tile )
+            // NPC ( location x, location y, health, attack, defense, difficulty, death tile, name )
             _NPCSprites.Add("mons_shadow", new NPC(new Vector2(24, 13), 100, 1, 0, 0, "empty"));
             _NPCSprites.Add("mons_earth_elemental", new NPC(new Vector2(25, 13), 100, 1, 0, 0, "empty"));
             _NPCSprites.Add("mons_fire_elemental", new NPC(new Vector2(26, 13), 100, 1, 0, 0, "empty"));
             _NPCSprites.Add("mons_vapour", new NPC(new Vector2(27, 13), 100, 1, 0, 0, "empty"));
             _NPCSprites.Add("mons_death_cob", new NPC(new Vector2(28, 13), 100, 1, 0, 0, "empty"));
-            _NPCSprites.Add("mons_asmodeus", new NPC(new Vector2(29, 13), 100, 1, 0, 0, "corpse_wizard"));
-            _NPCSprites.Add("mons_cerebov", new NPC(new Vector2(0, 14), 100, 1, 0, 0, "corpse_hell_knight"));
+            _NPCSprites.Add("mons_asmodeus", new NPC(new Vector2(29, 13), 100, 1, 0, 0, "corpse_wizard", "Asmodeus"));
+            _NPCSprites.Add("mons_cerebov", new NPC(new Vector2(0, 14), 100, 1, 0, 0, "corpse_hell_knight", "Cerebov"));
             _NPCSprites.Add("mons_dispater", new NPC(new Vector2(1, 14), 100, 1, 0, 0, "corpse_wizard"));
             _NPCSprites.Add("mons_ereshkigal", new NPC(new Vector2(2, 14), 100, 1, 0, 0, "corpse_human"));
             _NPCSprites.Add("mons_geryon", new NPC(new Vector2(3, 14), 100, 1, 0, 0, "corpse_naga"));
@@ -85,7 +85,7 @@ namespace Dungeon
             _NPCSprites.Add("mons_erica", new NPC(new Vector2(2, 16), 100, 1, 0, 0, "corpse_human"));
             _NPCSprites.Add("mons_frances", new NPC(new Vector2(3, 16), 100, 1, 0, 0, "corpse_human"));
             _NPCSprites.Add("mons_francis", new NPC(new Vector2(4, 16), 100, 1, 0, 0, "corpse_human"));
-            _NPCSprites.Add("mons_glowing_shapeshifter", new NPC(new Vector2(5, 16), 100, 1, 0, 0, "corpse_glowing_shapeshifter"));
+            _NPCSprites.Add("mons_glowing_shapeshifter", new NPC(new Vector2(5, 16), 100, 1, 0, 0, "corpse_glowing_shapeshifter", "Glowing Shapeshifter"));
             _NPCSprites.Add("mons_harold", new NPC(new Vector2(6, 16), 100, 1, 0, 0, "corpse_human"));
             _NPCSprites.Add("mons_hell_knight", new NPC(new Vector2(7, 16), 100, 1, 0, 0, "corpse_hell_knight"));
             _NPCSprites.Add("mons_human", new NPC(new Vector2(8, 16), 100, 1, 0, 0, "corpse_human"));

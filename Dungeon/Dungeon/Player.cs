@@ -10,7 +10,6 @@ namespace Dungeon
 {
     class Player : Entity
     {
-        Vector2 _location = new Vector2(0, 0);
         PlayerSpriteDictionary _playerSpriteSheet = new PlayerSpriteDictionary();
         string _playerRace;
         
@@ -20,6 +19,7 @@ namespace Dungeon
             this.location = startPos.tilePos;
             startPos.sightBlocker = false;
             this._playerRace = "mummy_m";
+            this._name = "Player";
 
             Log.Write("I come from the player!");
 
@@ -33,6 +33,7 @@ namespace Dungeon
             this._entityItems["off_hand"] = new Item(_playerSpriteSheet.GetItem("book_white"));
 
             this._health = 100;
+            this._maxHealth = 100;
             this._baseAttack = 10;
             this._baseDefense = 10;
             this._strength = 10;

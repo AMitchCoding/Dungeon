@@ -12,7 +12,9 @@ namespace Dungeon
         Random rand = new Random();
         public Vector2 _location = new Vector2();
         public bool _isAlive = true;
+        public string _name;
         public int _health;
+        public int _maxHealth;
         public int _baseAttack;
         public int _baseDefense;
         public int _strength;
@@ -31,10 +33,22 @@ namespace Dungeon
             set { this._health = value; }
             get { return this._health; }
         }
+        public int maxHealth
+        {
+            set { this._maxHealth = value; }
+            get { return this._maxHealth; }
+        }
+        public string name
+        {
+            set { this._name = value; }
+            get { return this._name; }
+        }
 
         public int GetDamage()
         {
-            return (int)(this._strength + (this._strength/10)^2 + (_dexterity/5) + (_luck/5) + rand.Next(Math.Min(_dexterity,_baseAttack), _baseAttack));
+            int damage = (int)(this._strength + (this._strength/10)^2 + (_dexterity/5) + (_luck/5) + rand.Next(Math.Min(_dexterity,_baseAttack), _baseAttack));
+            Log.Write(this._name + " did " + damage + " damage.");
+            return damage;
         }
 
         private void InitInventory()
