@@ -45,6 +45,7 @@ namespace Dungeon
         SpriteFont Font1;
         Vector2 FontPos;
         bool enemyDetected = false;
+        Texture2D healthBar;
 
         public Game1()
         {
@@ -52,7 +53,7 @@ namespace Dungeon
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             graphics.PreferredBackBufferHeight = 1000;
-            graphics.PreferredBackBufferWidth = 800;
+            graphics.PreferredBackBufferWidth = 1000;
         }
 
         /// <summary>
@@ -87,6 +88,7 @@ namespace Dungeon
             playerSpriteSheet = this.Content.Load<Texture2D>("player");
             Font1 = Content.Load<SpriteFont>("Courier New");
             border = this.Content.Load<Texture2D>("border");
+            healthBar = this.Content.Load<Texture2D>("hpbar");
 
         }
 
@@ -182,15 +184,10 @@ namespace Dungeon
                 spriteBatch.Draw(border, new Vector2(0, 800), Color.White);
                 Log.DrawLog(spriteBatch, Font1);
 
-                //Log setup and print
-                /*spriteBatch.Draw(border, new Vector2(0, 800), Color.White);
-                Vector2 fontPos = new Vector2(10, 815);
-                List<String> output = Log.GetLines(7);
-                foreach (String line in output)
-                {
-                    spriteBatch.DrawString(Font1, line, fontPos, Color.White);
-                    fontPos.Y += 20;
-                }*/
+                //Simple healthbar and health printout
+                string text = (player.health).ToString() + "/" + (player.maxHealth).ToString();
+                spriteBatch.DrawString(Font1, text, new Vector2(805, 50), Color.White);
+                spriteBatch.Draw(healthBar, new Rectangle(890,50,100,20), new Rectangle((int)(100.0*(player.maxHealth - player.health)/player.maxHealth),0,100,20), Color.White);
 
                 spriteBatch.End();
             }
