@@ -49,12 +49,6 @@ namespace Dungeon
             get { return this._tile; }
         }
 
-        public Vector2 location
-        {
-            set { this._location = value; }
-            get { return this._location; }
-        }
-
         public int attack
         {
             get { return this._baseAttack; }

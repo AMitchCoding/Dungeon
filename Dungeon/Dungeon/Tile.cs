@@ -96,24 +96,28 @@ namespace Dungeon
             this._entities.Remove(entity);
         }
 
-        public void OpenDoor()
+        public bool OpenDoor()
         {
             if(this._entities.Contains("dngn_closed_door"))
             {
                 this._entities.Remove("dngn_closed_door");
                 this._entities.Add("dngn_open_door");
                 this._sightBlocker = false;
+                return true;
             }
+            return false;
         }
 
-        public void CloseDoor()
+        public bool CloseDoor()
         {
             if(this._entities.Contains("dngn_open_door"))
             {
                 this._entities.Remove("dngn_open_door");
                 this._entities.Add("dngn_closed_door");
                 this._sightBlocker = true;
+                return true;
             }
+            return false;
         }
 
 

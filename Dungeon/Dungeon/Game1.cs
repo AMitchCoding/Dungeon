@@ -47,6 +47,10 @@ namespace Dungeon
         bool enemyDetected = false;
         Texture2D healthBar;
 
+        List<NPC> npcs = new List<NPC>();
+        Queue<Entity> turnOrder;
+        bool playerActed = false;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -68,7 +72,10 @@ namespace Dungeon
             Log.Write("Welcome to the dungeon!");
             level = new Dungeon(npcDicationary);
             dungeon.Add(level);
+            npcs = level.npcs;
             player = new Player(level.upStairs);
+            turnOrder = new Queue<Entity>(npcs);
+            turnOrder.Enqueue(player);
             fov = new FOV(level.grid, player.location);
             fov.GetVisibility();
             base.Initialize();
@@ -115,41 +122,52 @@ namespace Dungeon
             // TODO: Add your update logic here
             time = gameTime.TotalGameTime;
 
-            if (!menu)
+            if (turnOrder.Peek() == player)
             {
-                UpdateInput();
-            }
-            else
-            {
-                MenuInput();
-            }
-
-            if(moveToList.Count > 0)        //Update postion here so it can be drawn
-            {
-                player.MovePlayer(moveToList[0], level.grid);
-                moveToList.RemoveAt(0);
-                fov = new FOV(level.grid, player.location);
-                fov.GetVisibility();
-                if (player.MonsterCheck(level.grid) && moveToList.Count > 0)
+                if (!menu)
                 {
-                    if (!enemyDetected)
+                    UpdateInput();
+                }
+                else
+                {
+                    MenuInput();
+                }
+
+                if (moveToList.Count > 0)        //Update postion here so it can be drawn
+                {
+                    playerActed = player.MovePlayer(moveToList[0], level.grid);
+                    moveToList.RemoveAt(0);
+                    fov = new FOV(level.grid, player.location);
+                    fov.GetVisibility();
+                    if (player.MonsterCheck(level.grid) && moveToList.Count > 0)
                     {
-                        Log.Write("Enemy detected! Auto-travel has stopped.");
+                        if (!enemyDetected)
+                        {
+                            Log.Write("Enemy detected! Auto-travel has stopped.");
+                        }
+                        moveToList.Clear();
+                        enemyDetected = true;
                     }
-                    moveToList.Clear();
+                }
+                if (!player.MonsterCheck(level.grid))
+                {
+                    enemyDetected = false;
+                }
+                else
+                {
                     enemyDetected = true;
                 }
-            }
-            if (!player.MonsterCheck(level.grid))
-            {
-                enemyDetected = false;
+                if (playerActed)
+                {
+                    turnOrder.Enqueue(turnOrder.Dequeue());
+                    playerActed = false;
+                }
             }
             else
             {
-                enemyDetected = true;
+                turnOrder.Enqueue(turnOrder.Dequeue());
             }
-
-            foreach (NPC npc in level.npcs)
+            foreach (NPC npc in npcs)
                 npc.npcStillAlive(level.grid);
 
 
@@ -161,7 +179,7 @@ namespace Dungeon
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
-        {
+        {   
             GraphicsDevice.Clear(Color.Black);
 
             if (!menu)
@@ -181,6 +199,8 @@ namespace Dungeon
                 }
 
                 player.DrawPlayer(spriteBatch, playerSpriteSheet, player.location * 32);
+
+                //Draw log and border
                 spriteBatch.Draw(border, new Vector2(0, 800), Color.White);
                 Log.DrawLog(spriteBatch, Font1);
 
@@ -243,6 +263,7 @@ namespace Dungeon
                     dungeon.Clear();
                     level = new Dungeon(npcDicationary);
                     dungeon.Add(level);
+                    npcs = level.npcs;
                     currentdngn_floor = 0;
                     player = new Player(level.upStairs);
                     fov = new FOV(level.grid, player.location);
@@ -260,10 +281,10 @@ namespace Dungeon
                         switch(doorWait)
                         {
                             case("close"):
-                                doorTile.CloseDoor();
+                                playerActed = doorTile.CloseDoor();
                                 break;
                             case("open"):
-                                doorTile.OpenDoor();
+                                playerActed = doorTile.OpenDoor();
                                 break;
                         }
                         doorWait = "none";
@@ -287,10 +308,10 @@ namespace Dungeon
                         switch (doorWait)
                         {
                             case ("close"):
-                                doorTile.CloseDoor();
+                                playerActed = doorTile.CloseDoor();
                                 break;
                             case ("open"):
-                                doorTile.OpenDoor();
+                                playerActed = doorTile.OpenDoor();
                                 break;
                         }
                         doorWait = "none";
@@ -314,10 +335,10 @@ namespace Dungeon
                         switch (doorWait)
                         {
                             case ("close"):
-                                doorTile.CloseDoor();
+                                playerActed = doorTile.CloseDoor();
                                 break;
                             case ("open"):
-                                doorTile.OpenDoor();
+                                playerActed = doorTile.OpenDoor();
                                 break;
                         }
                         doorWait = "none";
@@ -341,10 +362,10 @@ namespace Dungeon
                         switch (doorWait)
                         {
                             case ("close"):
-                                doorTile.CloseDoor();
+                                playerActed = doorTile.CloseDoor();
                                 break;
                             case ("open"):
-                                doorTile.OpenDoor();
+                                playerActed = doorTile.OpenDoor();
                                 break;
                         }
                         doorWait = "none";
@@ -368,10 +389,10 @@ namespace Dungeon
                         switch (doorWait)
                         {
                             case ("close"):
-                                doorTile.CloseDoor();
+                                playerActed = doorTile.CloseDoor();
                                 break;
                             case ("open"):
-                                doorTile.OpenDoor();
+                                playerActed = doorTile.OpenDoor();
                                 break;
                         }
                         doorWait = "none";
@@ -395,10 +416,10 @@ namespace Dungeon
                         switch (doorWait)
                         {
                             case ("close"):
-                                doorTile.CloseDoor();
+                                playerActed = doorTile.CloseDoor();
                                 break;
                             case ("open"):
-                                doorTile.OpenDoor();
+                                playerActed = doorTile.OpenDoor();
                                 break;
                         }
                         doorWait = "none";
@@ -422,10 +443,10 @@ namespace Dungeon
                         switch (doorWait)
                         {
                             case ("close"):
-                                doorTile.CloseDoor();
+                                playerActed = doorTile.CloseDoor();
                                 break;
                             case ("open"):
-                                doorTile.OpenDoor();
+                                playerActed = doorTile.OpenDoor();
                                 break;
                         }
                         doorWait = "none";
@@ -449,10 +470,10 @@ namespace Dungeon
                         switch (doorWait)
                         {
                             case ("close"):
-                                doorTile.CloseDoor();
+                                playerActed = doorTile.CloseDoor();
                                 break;
                             case ("open"):
-                                doorTile.OpenDoor();
+                                playerActed = doorTile.OpenDoor();
                                 break;
                         }
                         doorWait = "none";
@@ -476,6 +497,7 @@ namespace Dungeon
                         {
                             level = new Dungeon(npcDicationary);
                             dungeon.Add(level);
+                            npcs = level.npcs;
                             currentdngn_floor++;
                         }
                         else
@@ -499,6 +521,7 @@ namespace Dungeon
                         {
                             currentdngn_floor--;
                             level = dungeon[currentdngn_floor];
+                            npcs = level.npcs;
                             player.location = level.downStairs.tilePos;
                             fov = new FOV(level.grid, player.location);
                             fov.GetVisibility();
