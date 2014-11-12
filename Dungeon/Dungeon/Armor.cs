@@ -23,15 +23,16 @@ namespace Dungeon
         //Testing item names
         public Armor(Vector4 spriteLoc, Vector2 offset, int defense, int durability, string name)
         {
+            this._name = name;
             this._spriteLoc = spriteLoc;
             this._offset = offset;
-            this._name = name;
             this._defense = defense;
             this._durability = durability;
         }
 
         public Armor(Armor armor)
         {
+            this._name = armor.name;
             this._spriteLoc = armor.spriteLoc;
             this._offset = armor.offset;
             this._defense = armor.defense;
