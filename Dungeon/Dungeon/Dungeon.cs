@@ -129,7 +129,7 @@ namespace Dungeon
                 }
                 else
                 {
-                    if(end of foreach comes back)
+                    //if(end of foreach comes back)
                     foreach (Edge adjEdge in testEdge.vA.adjEdges)
                     {
                         if(edgesMST.Contains(adjEdge))

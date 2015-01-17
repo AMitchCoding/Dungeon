@@ -18,6 +18,7 @@ namespace Dungeon
         private string _tileName = "dngn_rock_wall_dark_gray";
         List<string> _items = new List<string>();
         List<string> _entities = new List<string>();
+        NPC _npc = null;
 
         public Tile(Vector2 tilePos)
         {
@@ -27,6 +28,12 @@ namespace Dungeon
         public Vector2 tilePos
         {
             get { return this._tilePos; }
+        }
+
+        public NPC npc
+        {
+            set { this._npc = value; }
+            get { return this._npc; }
         }
 
         public string tileName
