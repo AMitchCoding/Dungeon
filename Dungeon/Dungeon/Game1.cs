@@ -221,9 +221,15 @@ namespace Dungeon
                 spriteBatch.DrawString(Font1, output, FontPos, Color.SandyBrown, 0, FontOrigin, 1.0f, SpriteEffects.None, 0.5f);    // Draw the string
                 FontOrigin.X = FontOrigin.X - (graphics.GraphicsDevice.Viewport.Width / 32);
                 foreach (KeyValuePair<String, Item> item in player._entityItems)
-                {
+                {              
                     output = item.Key;
-                    output += ": " + player._entityItems[output].name; //Testing adding item names
+                    output += ": " + item.Value.name; //Testing adding item names
+                    //output += " item type " + item.Value.GetType().FullName;
+                    if (item.Value.GetType() == typeof(Focus))
+                    {
+                        Focus focus = (Focus)item.Value;
+                        output += " - " + focus.school;
+                    }
                     FontOrigin.Y = FontOrigin.Y - (graphics.GraphicsDevice.Viewport.Height / 32);
                     spriteBatch.DrawString(Font1, output, FontPos, Color.SandyBrown, 0, FontOrigin, 1.0f, SpriteEffects.None, 0.5f);    // Draw the string
                 }

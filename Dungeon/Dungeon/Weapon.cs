@@ -32,6 +32,7 @@ namespace Dungeon
 
         public Weapon(Weapon weapon)
         {
+            this._name = weapon.name;
             this._spriteLoc = weapon.spriteLoc;
             this._offset = weapon.offset;
             this._attack = weapon.attack;

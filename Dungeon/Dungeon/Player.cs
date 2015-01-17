@@ -11,6 +11,7 @@ namespace Dungeon
     class Player : Entity
     {
         PlayerSpriteDictionary _playerSpriteSheet = new PlayerSpriteDictionary();
+        SpellDictionary _playerSpellDictionary = new SpellDictionary();
         string _playerRace;
         
         public Player(Tile startPos)
@@ -19,18 +20,17 @@ namespace Dungeon
             this.location = startPos.tilePos;
             startPos.sightBlocker = false;
             this._playerRace = "mummy_m";
-            this._name = "Player";
+            this._name = "Player";            
 
-            Log.Write("I come from the player!");
-
-            this._entityItems["head"] = new Item(_playerSpriteSheet.GetItem("fhelm_evil"));
-            this._entityItems["chest"] = new Item(_playerSpriteSheet.GetItem("chainmail3"));
-            this._entityItems["back"] = new Item(_playerSpriteSheet.GetItem("blue_cape"));
-            this._entityItems["hands"] = new Item(_playerSpriteSheet.GetItem("glove_blue"));
-            this._entityItems["legs"] = new Item(_playerSpriteSheet.GetItem("leg_arm_steel"));
-            this._entityItems["feet"] = new Item(_playerSpriteSheet.GetItem("short_brown_shoes"));
-            this._entityItems["main_hand"] = new Item(_playerSpriteSheet.GetItem("spiked_flail"));
-            this._entityItems["off_hand"] = new Item(_playerSpriteSheet.GetItem("book_white"));
+            this._entityItems["head"] = new Armor(_playerSpriteSheet.GetArmor("fhelm_evil"));
+            this._entityItems["chest"] = new Armor(_playerSpriteSheet.GetArmor("chainmail3"));
+            this._entityItems["back"] = new Armor(_playerSpriteSheet.GetArmor("blue_cape"));
+            this._entityItems["hands"] = new Armor(_playerSpriteSheet.GetArmor("glove_blue"));
+            this._entityItems["legs"] = new Armor(_playerSpriteSheet.GetArmor("leg_arm_steel"));
+            this._entityItems["feet"] = new Armor(_playerSpriteSheet.GetArmor("short_brown_shoes"));
+            this._entityItems["main_hand"] = new Weapon(_playerSpriteSheet.GetWeapon("spiked_flail"));
+            this._entityItems["off_hand"] = new Focus(_playerSpriteSheet.GetFocus("book_white"), _playerSpellDictionary.GetSchool());
+            this._entityItems["1"] = new Weapon(_playerSpriteSheet.GetWeapon("great_flail"));
 
             this._health = 100;
             this._maxHealth = 100;

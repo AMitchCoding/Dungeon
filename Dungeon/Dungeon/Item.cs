@@ -49,5 +49,6 @@ namespace Dungeon
             set { this._name = value; }
             get { return this._name; }
         }
+
     }
 }
