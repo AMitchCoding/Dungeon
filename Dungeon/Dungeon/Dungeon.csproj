@@ -87,7 +87,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Armor.cs" />
+    <Compile Include="CircleTest.cs" />
     <Compile Include="Combat.cs" />
+    <Compile Include="Edge.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Focus.cs" />
     <Compile Include="Log.cs" />
@@ -104,6 +106,8 @@
     <Compile Include="Tile.cs" />
     <Compile Include="PlayerSpriteDictionary.cs" />
     <Compile Include="TileDictionary.cs" />
+    <Compile Include="Triangle.cs" />
+    <Compile Include="Vertex.cs" />
     <Compile Include="Weapon.cs" />
   </ItemGroup>
   <ItemGroup>
