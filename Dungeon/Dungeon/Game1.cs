@@ -47,9 +47,9 @@ namespace Dungeon
         bool enemyDetected = false;
         Texture2D healthBar;
 
-        List<NPC> npcs = new List<NPC>();
-        Queue<Entity> turnOrder;
         bool playerActed = false;
+        List<NPC> npcs;
+        Random random = new Random();
 
         public Game1()
         {
@@ -74,8 +74,6 @@ namespace Dungeon
             dungeon.Add(level);
             npcs = level.npcs;
             player = new Player(level.upStairs);
-            turnOrder = new Queue<Entity>(npcs);
-            turnOrder.Enqueue(player);
             fov = new FOV(level.grid, player.location);
             fov.GetVisibility();
             base.Initialize();
@@ -122,8 +120,19 @@ namespace Dungeon
             // TODO: Add your update logic here
             time = gameTime.TotalGameTime;
 
-            if (turnOrder.Peek() == player)
+            
+            foreach (NPC npc in npcs)
             {
+                /*if (playerActed)
+                {
+                    npc.MovePlayer(new Vector2(random.Next(3) - 1, random.Next(3) - 1), level.grid);
+                }*/
+                npc.npcStillAlive(level.grid);
+            }
+            /*playerActed = false;
+
+            if (!playerActed)
+            {*/
                 if (!menu)
                 {
                     UpdateInput();
@@ -157,21 +166,11 @@ namespace Dungeon
                 {
                     enemyDetected = true;
                 }
-                if (playerActed)
-                {
-                    turnOrder.Enqueue(turnOrder.Dequeue());
-                    playerActed = false;
-                }
-            }
-            else
-            {
-                turnOrder.Enqueue(turnOrder.Dequeue());
-            }
-            foreach (NPC npc in npcs)
-                npc.npcStillAlive(level.grid);
 
+            //}
 
             base.Update(gameTime);
+
         }
 
         /// <summary>
@@ -269,6 +268,7 @@ namespace Dungeon
                     fov = new FOV(level.grid, player.location);
                     fov.GetVisibility();
                     Log.Write("New floor generated.");
+                    playerActed = false;
                 }
             } 
             if (newState.IsKeyDown(Keys.Left) || newState.IsKeyDown(Keys.NumPad4))
