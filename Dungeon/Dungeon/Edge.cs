@@ -8,30 +8,30 @@ namespace Dungeon
 {
     class Edge
     {
-        Vertex _vA, _vB;
+        Vector2 _vA, _vB;
         float _weight;
         List<Edge> _adjMSTEdges = new List<Edge>();
         bool hasAdj = false;
-        public Edge(Vertex a, Vertex b)
+        public Edge(Vector2 a, Vector2 b)
         {
-            if(a.pos.X < b.pos.X)
+            if(a.X < b.X)
             {
                 this._vA = a;
                 this._vB = b;
             }
-            else if(a.pos.X > b.pos.X)
+            else if(a.X > b.X)
             {
                 this._vA = b;
                 this._vB = a;
             }
             else
             {
-                if (a.pos.Y < b.pos.Y)
+                if (a.Y < b.Y)
                 {
                     this._vA = a;
                     this._vB = b;
                 }
-                else if (a.pos.Y > b.pos.Y)
+                else if (a.Y > b.Y)
                 {
                     this._vA = b;
                     this._vB = a;
@@ -41,7 +41,7 @@ namespace Dungeon
                     throw new Exception("You dun goofed kid");
                 }
             }
-            this._weight = Vector2.Distance(this._vA.pos, this._vB.pos);
+            this._weight = Vector2.Distance(this._vA, this._vB);
         }
          
         public bool CompareEdge(Edge testEdge)
@@ -53,9 +53,9 @@ namespace Dungeon
                 return false;
         }
 
-        public List<Vertex> VertexList()
+        public List<Vector2> VertexList()
         {
-            List<Vertex> vList = new List<Vertex>();
+            List<Vector2> vList = new List<Vector2>();
             vList.Add(this._vA);
             vList.Add(this._vB);
             return vList;
@@ -72,11 +72,19 @@ namespace Dungeon
                 }
             }
         }
-        public Vertex vA
+
+        public bool CheckTransEdge(Edge edge)
+        {
+            if (this._vA.Equals(edge.vA) && this._vB.Equals(edge.vB))
+                return true;
+            else
+                return false;
+        }
+        public Vector2 vA
         {
             get { return this._vA; }
         }
-        public Vertex vB
+        public Vector2 vB
         {
             get { return this._vB; }
         }

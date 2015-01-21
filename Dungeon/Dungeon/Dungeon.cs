@@ -12,14 +12,14 @@ namespace Dungeon
         List<Rectangle> rooms = new List<Rectangle>();
         Tile _upStairs;
         Tile _downStairs;
-        List<Vertex> roomNodes = new List<Vertex>();
+        List<Vector2> roomNodes = new List<Vector2>();
         List<Triangle> triangulation = new List<Triangle>();
         List<Triangle> deadTriangles = new List<Triangle>();
         List<Edge> edgesMST = new List<Edge>();
         CircleTest tester = new CircleTest();
-        Vertex tl = new Vertex(new Vector2(0, 0));
-        Vertex tr = new Vertex(new Vector2(50, 0));
-        Vertex bl = new Vertex(new Vector2(0, 50));
+        Vector2 tl = new Vector2(0, 0);
+        Vector2 tr = new Vector2(50, 0);
+        Vector2 bl = new Vector2(0, 50);
         private Tile[,] _grid = new Tile[25,25];
         int attempts = 1;
         double dungeonArea = 625.0;
@@ -75,17 +75,13 @@ namespace Dungeon
         {
             HashSet<Edge> edges = new HashSet<Edge>();
             Stack<Edge> sortEdges = new Stack<Edge>();
+            int addedEdges = 0;
             foreach (Triangle triangle in triangulation)
             {
                 foreach (Edge edge in triangle.edges)
                 {
                     edges.Add(edge);
                 }
-            }
-
-            foreach(Vertex node in roomNodes)
-            {
-                node.FindAdjacent(edges);
             }
 
             while (edges.Count > 0)
@@ -102,49 +98,61 @@ namespace Dungeon
                 edges.Remove(nextEdge);
             }
 
-            while(sortEdges.Count > 0 || edgesMST.Count != roomNodes.Count - 1)
+            List<Edge> transEdges = new List<Edge>();
+
+            while(addedEdges < roomNodes.Count - 1)
             {
-                Edge testEdge = null; 
-                List<Edge> nextEdges = new List<Edge>();
-                bool bothVisited = true;
-                bool cycle = true;
+                Edge testEdge = null;
+                bool trans = false;
 
                 testEdge = sortEdges.Pop();
                 testEdge.FindAdjacentEdges(edgesMST);
 
-                foreach(Vertex node in testEdge.VertexList())
+                foreach(Edge edge in transEdges)
                 {
-                    if (!node.visited)
-                        bothVisited = false;
+                    if (testEdge.CheckTransEdge(edge))
+                    {
+                        trans = true;
+                        break;
+                    }
                 }
 
-                if(!bothVisited)
+                if(!trans)
                 {
-                    foreach (Vertex node in testEdge.VertexList())
-                    {
-                        node.visited = true;
-                    }
                     edgesMST.Add(testEdge);
-
-                }
-                else
-                {
-                    foreach (Edge adjEdge in testEdge.vA.adjEdges)
+                    transEdges.Add(testEdge);
+                    addedEdges++;
+                    //Breaks because transEdges is diff due to having been added to.
+                    foreach (Edge edgeA in transEdges)
                     {
-                        if(edgesMST.Contains(adjEdge))
+                        foreach (Edge edgeB in transEdges)
                         {
-                            nextEdges.Add(adjEdge);
+                            if(!edgeA.CheckTransEdge(edgeB))
+                            {
+                                if(edgeA.vA.Equals(edgeB.vA))
+                                {
+                                    transEdges.Add(new Edge(edgeA.vB, edgeB.vB));
+                                    break;
+                                }
+                                else if(edgeA.vA.Equals(edgeB.vB))
+                                {
+                                    transEdges.Add(new Edge(edgeA.vB, edgeB.vA)); 
+                                    break;
+                                }
+                                else if(edgeA.vB.Equals(edgeB.vA))
+                                {
+                                    transEdges.Add(new Edge(edgeA.vA, edgeB.vB));
+                                    break;
+                                }
+                                else if(edgeA.vB.Equals(edgeB.vB))
+                                {
+                                    transEdges.Add(new Edge(edgeA.vA, edgeB.vA));
+                                    break;
+                                }
+                            }
                         }
                     }
-
-                    foreach(Edge edge in nextEdges)
-                    {
-                        if (edge.VertexList().Contains(testEdge.vB))
-                        {
-                            break;
-                        }
-                    }
-                }
+                }                
             }
         }
 
@@ -154,7 +162,7 @@ namespace Dungeon
         {
             triangulation.Add(new Triangle(new Edge(tl, tr), new Edge(tl, bl), new Edge(tr, bl)));
 
-            foreach(Vertex point in roomNodes)
+            foreach (Vector2 point in roomNodes)
             {
                 List<Triangle> badTriangles = new List<Triangle>();
                 List<Edge> polygon = new List<Edge>();
@@ -163,7 +171,7 @@ namespace Dungeon
 
                 foreach (Triangle testTri in triangulation)
                 {
-                    if (tester.CircleTester(testTri.vA.pos, testTri.vB.pos, testTri.vC.pos, point.pos))
+                    if (tester.CircleTester(testTri.vA, testTri.vB, testTri.vC, point))
                     {
                         badTriangles.Add(testTri);
                     }
@@ -268,7 +276,7 @@ namespace Dungeon
 
 
             rooms.Add(roomRect);
-            roomNodes.Add(new Vertex(new Vector2(roomRect.Center.X, roomRect.Center.Y)));
+            roomNodes.Add(new Vector2(roomRect.Center.X, roomRect.Center.Y));
             walls -= (double)(roomRect.Width - 2) * (double)(roomRect.Height - 2);
         }
 

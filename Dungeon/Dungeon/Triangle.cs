@@ -10,7 +10,7 @@ namespace Dungeon
     {
         List<Edge> _edges = new List<Edge>();
         Edge _eA, _eB, _eC;
-        Vertex _vA, _vB, _vC;
+        Vector2 _vA, _vB, _vC;
         public Triangle(Edge a, Edge b, Edge c)
         {
             this._eA = a;
@@ -24,24 +24,24 @@ namespace Dungeon
             this._edges.Add(c);
         }
 
-        public bool SuperTriCheck(Vertex point)
+        public bool SuperTriCheck(Vector2 point)
         {
-            if (Vector2.Distance(point.pos, this._vA.pos) == 0 ||
-                Vector2.Distance(point.pos, this._vB.pos) == 0 ||
-                Vector2.Distance(point.pos, this._vC.pos) == 0)
+            if (Vector2.Distance(point, this._vA) == 0 ||
+                Vector2.Distance(point, this._vB) == 0 ||
+                Vector2.Distance(point, this._vC) == 0)
                 return true;
             else
                 return false;
         }
-        public Vertex vA
+        public Vector2 vA
         {
             get { return this._vA; }
         }
-        public Vertex vB
+        public Vector2 vB
         {
             get { return this._vB; }
         }
-        public Vertex vC
+        public Vector2 vC
         {
             get { return this._vC; }
         }
