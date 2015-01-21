@@ -14,11 +14,36 @@ namespace Dungeon
         bool hasAdj = false;
         public Edge(Vertex a, Vertex b)
         {
-            this._vA = a;
-            this._vB = b;
+            if(a.pos.X < b.pos.X)
+            {
+                this._vA = a;
+                this._vB = b;
+            }
+            else if(a.pos.X > b.pos.X)
+            {
+                this._vA = b;
+                this._vB = a;
+            }
+            else
+            {
+                if (a.pos.Y < b.pos.Y)
+                {
+                    this._vA = a;
+                    this._vB = b;
+                }
+                else if (a.pos.Y > b.pos.Y)
+                {
+                    this._vA = b;
+                    this._vB = a;
+                }
+                else
+                {
+                    throw new Exception("You dun goofed kid");
+                }
+            }
             this._weight = Vector2.Distance(this._vA.pos, this._vB.pos);
         }
-
+         
         public bool CompareEdge(Edge testEdge)
         {
             if ((this._vA.Equals(testEdge.vA) && this._vB.Equals(testEdge.vB)) ||

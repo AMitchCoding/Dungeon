@@ -104,7 +104,7 @@ namespace Dungeon
 
             while(sortEdges.Count > 0 || edgesMST.Count != roomNodes.Count - 1)
             {
-                Edge testEdge = null;
+                Edge testEdge = null; 
                 List<Edge> nextEdges = new List<Edge>();
                 bool bothVisited = true;
                 bool cycle = true;
@@ -129,7 +129,6 @@ namespace Dungeon
                 }
                 else
                 {
-                    //if(end of foreach comes back)
                     foreach (Edge adjEdge in testEdge.vA.adjEdges)
                     {
                         if(edgesMST.Contains(adjEdge))
