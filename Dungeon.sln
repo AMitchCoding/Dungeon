@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
+# Visual Studio Express 2013 for Windows Desktop
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dungeon", "Dungeon\Dungeon\Dungeon.csproj", "{6A4B353D-8F28-487D-B0A3-8F748EEA54DF}"
@@ -15,6 +15,7 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{6A4B353D-8F28-487D-B0A3-8F748EEA54DF}.Debug|x86.ActiveCfg = Debug|x86
 		{6A4B353D-8F28-487D-B0A3-8F748EEA54DF}.Debug|x86.Build.0 = Debug|x86
+		{6A4B353D-8F28-487D-B0A3-8F748EEA54DF}.Debug|x86.Deploy.0 = Debug|x86
 		{6A4B353D-8F28-487D-B0A3-8F748EEA54DF}.Release|x86.ActiveCfg = Release|x86
 		{6A4B353D-8F28-487D-B0A3-8F748EEA54DF}.Release|x86.Build.0 = Release|x86
 		{560B2473-ECE4-4E40-98DC-D21591BD35F4}.Debug|x86.ActiveCfg = Debug|x86
