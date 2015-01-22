@@ -98,11 +98,13 @@ namespace Dungeon
                 edges.Remove(nextEdge);
             }
 
-            List<Edge> transEdges = new List<Edge>();
+            HashSet<Edge> transEdges = new HashSet<Edge>();
 
             while(addedEdges < roomNodes.Count - 1)
             {
                 Edge testEdge = null;
+                Edge transEdge = null;
+                HashSet<Edge> tempEdges = new HashSet<Edge>();
                 bool trans = false;
 
                 testEdge = sortEdges.Pop();
@@ -127,31 +129,37 @@ namespace Dungeon
                     {
                         foreach (Edge edgeB in transEdges)
                         {
-                            if(!edgeA.CheckTransEdge(edgeB))
+                            if(edgeA != edgeB)
                             {
                                 if(edgeA.vA.Equals(edgeB.vA))
                                 {
-                                    transEdges.Add(new Edge(edgeA.vB, edgeB.vB));
+                                    transEdge = new Edge(edgeA.vB, edgeB.vB);
+                                    tempEdges.Add(transEdge);
                                     break;
                                 }
                                 else if(edgeA.vA.Equals(edgeB.vB))
                                 {
-                                    transEdges.Add(new Edge(edgeA.vB, edgeB.vA)); 
+                                    transEdge = new Edge(edgeA.vB, edgeB.vA);
+                                    tempEdges.Add(transEdge);
                                     break;
                                 }
                                 else if(edgeA.vB.Equals(edgeB.vA))
                                 {
-                                    transEdges.Add(new Edge(edgeA.vA, edgeB.vB));
+                                    transEdge = new Edge(edgeA.vA, edgeB.vB);
+                                    tempEdges.Add(transEdge);
                                     break;
                                 }
                                 else if(edgeA.vB.Equals(edgeB.vB))
                                 {
-                                    transEdges.Add(new Edge(edgeA.vA, edgeB.vA));
+                                    transEdge = new Edge(edgeA.vA, edgeB.vA);
+                                    tempEdges.Add(transEdge);
                                     break;
                                 }
                             }
                         }
                     }
+                    transEdges.UnionWith(tempEdges);
+
                 }                
             }
         }
