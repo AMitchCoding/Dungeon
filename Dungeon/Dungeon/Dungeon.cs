@@ -8,6 +8,7 @@ namespace Dungeon
 {
     class Dungeon
     {
+        //Testing Git credentials thing...
         Random rand = new Random((int)DateTime.Now.Ticks);
         List<Rectangle> rooms = new List<Rectangle>();
         Tile _upStairs;
@@ -23,11 +24,7 @@ namespace Dungeon
         Vector2 tr = new Vector2(50, 0);
         Vector2 bl = new Vector2(0, 50);
         private Tile[,] _grid = new Tile[25,25];
-        bool validWall = false;
-        int newDirection = 0; //NESW
         List<int> possibleDoors = new List<int>();
-        int dngn_floorCheckX = 1;
-        int dngn_floorCheckY = 1;
         int attempts = 1;
         double dungeonArea = 625.0;
         double walls = 625.0;
