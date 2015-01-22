@@ -19,6 +19,8 @@ namespace Dungeon
             this._vA = a.vA;
             this._vB = a.vB;
             this._vC = b.vB;
+            if (this._vA.Equals(this._vC))
+                this._vC = b.vA;
             this._edges.Add(a);
             this._edges.Add(b);
             this._edges.Add(c);

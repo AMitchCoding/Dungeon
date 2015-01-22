@@ -8,8 +8,8 @@ namespace Dungeon
 {
     class Dungeon
     {
-        //Testing Git credentials thing...
-        Random rand = new Random((int)DateTime.Now.Ticks);
+        //Random rand = new Random((int)DateTime.Now.Ticks);
+        Random rand = new Random(2);
         List<Rectangle> rooms = new List<Rectangle>();
         Tile _upStairs;
         Tile _downStairs;
@@ -139,40 +139,33 @@ namespace Dungeon
                         countIn = countOut + 1;
                         while(countIn < transEdges.Count)
                         {
-                            try
+                            if (!transEdges[countOut].CompareEdge(transEdges[countIn]))
                             {
-                                if (!transEdges[countOut].CompareEdge(transEdges[countIn]))
+                                if (transEdges[countOut].vA.Equals(transEdges[countIn].vA))
                                 {
-                                    if (transEdges[countOut].vA.Equals(transEdges[countIn].vA))
-                                    {
-                                        tempEdge = new Edge(transEdges[countOut].vB, transEdges[countIn].vB);
-                                        if(!tempEdge.CheckTransEdge(transEdges))
-                                            tempEdges.Add(tempEdge);
-                                    }
-                                    else if (transEdges[countOut].vA.Equals(transEdges[countIn].vB))
-                                    {
-                                        tempEdge = new Edge(transEdges[countOut].vB, transEdges[countIn].vA);
-                                        if (!tempEdge.CheckTransEdge(transEdges))
-                                            tempEdges.Add(tempEdge);
-                                    }
-                                    else if (transEdges[countOut].vB.Equals(transEdges[countIn].vA))
-                                    {
-                                        tempEdge = new Edge(transEdges[countOut].vA, transEdges[countIn].vB);
-                                        if (!tempEdge.CheckTransEdge(transEdges))
-                                            tempEdges.Add(tempEdge);
-                                    }
-                                    else if (transEdges[countOut].vB.Equals(transEdges[countIn].vB))
-                                    {
-                                        tempEdge = new Edge(transEdges[countOut].vA, transEdges[countIn].vA);
-                                        if (!tempEdge.CheckTransEdge(transEdges))
-                                            tempEdges.Add(tempEdge);
-                                    }
+                                    tempEdge = new Edge(transEdges[countOut].vB, transEdges[countIn].vB);
+                                    if (!tempEdge.CheckTransEdge(transEdges) && !tempEdge.CheckTransEdge(tempEdges))
+                                        tempEdges.Add(tempEdge);
                                 }
-                            }
-                            catch(Exception e)
-                            {
-                                System.Console.WriteLine(transEdges.Count);
-                                System.Console.WriteLine("Whoops");
+                                else if (transEdges[countOut].vA.Equals(transEdges[countIn].vB))
+                                {
+                                    tempEdge = new Edge(transEdges[countOut].vB, transEdges[countIn].vA);
+                                    if (!tempEdge.CheckTransEdge(transEdges) && !tempEdge.CheckTransEdge(tempEdges))
+                                        tempEdges.Add(tempEdge);
+                                }
+                                else if (transEdges[countOut].vB.Equals(transEdges[countIn].vA))
+                                {
+                                    tempEdge = new Edge(transEdges[countOut].vA, transEdges[countIn].vB);
+                                    if (!tempEdge.CheckTransEdge(transEdges) && !tempEdge.CheckTransEdge(tempEdges))
+                                        tempEdges.Add(tempEdge);
+                                }
+                                else if (transEdges[countOut].vB.Equals(transEdges[countIn].vB))
+                                {
+                                    tempEdge = new Edge(transEdges[countOut].vA, transEdges[countIn].vA);
+                                    if (!tempEdge.CheckTransEdge(transEdges) && !tempEdge.CheckTransEdge(tempEdges))
+                                        tempEdges.Add(tempEdge);
+                                }
+
                             }
                             countIn++;
                         }
