@@ -14,6 +14,14 @@ namespace Dungeon
         Tile _downStairs;
         Tile _monsTile;
         List<NPC> _npcs = new List<NPC>();
+        List<Vector2> roomNodes = new List<Vector2>();
+        List<Triangle> triangulation = new List<Triangle>();
+        List<Triangle> deadTriangles = new List<Triangle>();
+        List<Edge> edgesMST = new List<Edge>();
+        CircleTest tester = new CircleTest();
+        Vector2 tl = new Vector2(0, 0);
+        Vector2 tr = new Vector2(50, 0);
+        Vector2 bl = new Vector2(0, 50);
         private Tile[,] _grid = new Tile[25,25];
         bool validWall = false;
         int newDirection = 0; //NESW
@@ -38,44 +46,11 @@ namespace Dungeon
                         _grid[x, y].isEdge = true;
                 }
             }
-            Rectangle roomRect = new Rectangle(rand.Next(0, _grid.GetLength(0) - 5), rand.Next(1, _grid.GetLength(1) - 5), rand.Next(5, 11), rand.Next(5, 11));
-            MakeRoom(roomRect);
+            MakeRoom(MakeRectangle());
 
-            while (((walls / dungeonArea) > .25) && attempts != 5000)
+            while (((walls / dungeonArea) > .50) && attempts != 5000)
             {
-                while (!validWall)
-                {
-                    dngn_floorCheckX = rand.Next(_grid.GetLength(0));
-                    dngn_floorCheckY = rand.Next(_grid.GetLength(1));
-                    if (_grid[dngn_floorCheckX, dngn_floorCheckY].tileName == "dngn_floor")
-                    {
-                        if (_grid[dngn_floorCheckX, dngn_floorCheckY - 1].tileName == "dngn_rock_wall_dark_gray")
-                            possibleDoors.Add(1);
-                        if (_grid[dngn_floorCheckX + 1, dngn_floorCheckY].tileName == "dngn_rock_wall_dark_gray")
-                            possibleDoors.Add(2);
-                        if (_grid[dngn_floorCheckX, dngn_floorCheckY + 1].tileName == "dngn_rock_wall_dark_gray")
-                            possibleDoors.Add(3);
-                        if (_grid[dngn_floorCheckX - 1, dngn_floorCheckY].tileName == "dngn_rock_wall_dark_gray")
-                            possibleDoors.Add(4);
-
-                        if (possibleDoors.Count > 0)
-                            validWall = true;
-                    }
-                }
-
-                newDirection = possibleDoors[rand.Next(possibleDoors.Count)];
-                possibleDoors.Clear();
-                validWall = false;
-
-                if(rand.Next(11) > 1)
-                {
-                        TestRoom(newDirection, false);
-                }
-                else
-                {
-                        TestRoom(newDirection, true);
-                }
-
+                TestRoom();
                 attempts++;
             }
 
@@ -98,7 +73,10 @@ namespace Dungeon
                 }
             }
 
-            foreach(NPC monster in _npcs)
+            DTGeneration();
+            MSTGeneration();
+
+            foreach (NPC monster in _npcs)
             {
                 while (true)
                 {
@@ -111,94 +89,181 @@ namespace Dungeon
                     }
                 }
             }
+        }
+        private void MSTGeneration()
+        {
+            HashSet<Edge> edges = new HashSet<Edge>();
+            Stack<Edge> sortEdges = new Stack<Edge>();
+            int addedEdges = 0;
+            foreach (Triangle triangle in triangulation)
+            {
+                foreach (Edge edge in triangle.edges)
+                {
+                    edges.Add(edge);
+                }
+            }
 
+            while (edges.Count > 0)
+            {
+                Edge nextEdge = null;
+                foreach (Edge edge in edges)
+                {
+                    if ((nextEdge == null) || (nextEdge.weight < edge.weight))
+                    {
+                        nextEdge = edge;
+                    }
+                }
+                sortEdges.Push(nextEdge);
+                edges.Remove(nextEdge);
+            }
 
+            List<Edge> transEdges = new List<Edge>();
+
+            while(addedEdges < roomNodes.Count - 1)
+            {
+                Edge testEdge = null;
+                Edge tempEdge = null;
+                List<Edge> tempEdges = new List<Edge>();
+
+                testEdge = sortEdges.Pop();
+                testEdge.FindAdjacentEdges(edgesMST);
+
+                if (!testEdge.CheckTransEdge(transEdges))
+                {
+                    edgesMST.Add(testEdge);
+                    transEdges.Add(testEdge);
+                    addedEdges++;
+
+                    int countOut = 0;
+                    int countIn = 0;
+
+                    while(countOut < transEdges.Count)
+                    {
+                        countIn = countOut + 1;
+                        while(countIn < transEdges.Count)
+                        {
+                            try
+                            {
+                                if (!transEdges[countOut].CompareEdge(transEdges[countIn]))
+                                {
+                                    if (transEdges[countOut].vA.Equals(transEdges[countIn].vA))
+                                    {
+                                        tempEdge = new Edge(transEdges[countOut].vB, transEdges[countIn].vB);
+                                        if(!tempEdge.CheckTransEdge(transEdges))
+                                            tempEdges.Add(tempEdge);
+                                    }
+                                    else if (transEdges[countOut].vA.Equals(transEdges[countIn].vB))
+                                    {
+                                        tempEdge = new Edge(transEdges[countOut].vB, transEdges[countIn].vA);
+                                        if (!tempEdge.CheckTransEdge(transEdges))
+                                            tempEdges.Add(tempEdge);
+                                    }
+                                    else if (transEdges[countOut].vB.Equals(transEdges[countIn].vA))
+                                    {
+                                        tempEdge = new Edge(transEdges[countOut].vA, transEdges[countIn].vB);
+                                        if (!tempEdge.CheckTransEdge(transEdges))
+                                            tempEdges.Add(tempEdge);
+                                    }
+                                    else if (transEdges[countOut].vB.Equals(transEdges[countIn].vB))
+                                    {
+                                        tempEdge = new Edge(transEdges[countOut].vA, transEdges[countIn].vA);
+                                        if (!tempEdge.CheckTransEdge(transEdges))
+                                            tempEdges.Add(tempEdge);
+                                    }
+                                }
+                            }
+                            catch(Exception e)
+                            {
+                                System.Console.WriteLine(transEdges.Count);
+                                System.Console.WriteLine("Whoops");
+                            }
+                            countIn++;
+                        }
+                        countOut++;
+                    }
+                    transEdges.AddRange(tempEdges);
+                }                
+            }
+        }
+        private void DTGeneration()
+        {
+            triangulation.Add(new Triangle(new Edge(tl, tr), new Edge(tl, bl), new Edge(tr, bl)));
+            foreach (Vector2 point in roomNodes)
+            {
+                List<Triangle> badTriangles = new List<Triangle>();
+                List<Edge> polygon = new List<Edge>();
+                List<Edge> badEdges = new List<Edge>();
+                bool sharedEdge = false;
+
+                foreach (Triangle testTri in triangulation)
+                {
+                    if (tester.CircleTester(testTri.vA, testTri.vB, testTri.vC, point))
+                    {
+                        badTriangles.Add(testTri);
+                    }                    
+                }
+                foreach (Triangle badTri in badTriangles)
+                {
+                    foreach (Edge badTriEdge in badTri.edges)
+                    {
+                        foreach (Triangle testBadTri in badTriangles)
+                        {
+                            if (!(badTri.Equals(testBadTri)))
+                            {
+                                if (testBadTri.edges.Contains(badTriEdge))
+                                {
+                                    sharedEdge = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (!sharedEdge)
+                            polygon.Add(badTriEdge);
+                        sharedEdge = false;
+                    }
+                }
+                foreach (Triangle badTri in badTriangles)
+                {
+                    triangulation.Remove(badTri);
+                }
+                foreach (Edge polyEdge in polygon)
+                {
+                    Edge newEdge1 = new Edge(polyEdge.vA, point);
+                    Edge newEdge2 = new Edge(polyEdge.vB, point);
+
+                    foreach(Triangle testTri in triangulation)
+                    {
+                        foreach(Edge testEdge in testTri.edges)
+                        {
+                            if (testEdge.CompareEdge(newEdge1))
+                            {
+                                newEdge1 = testEdge;
+                            }
+                            if (testEdge.CompareEdge(newEdge2))
+                            {
+                                newEdge2 = testEdge;
+                            }
+                        }
+                    }
+                    triangulation.Add(new Triangle(polyEdge, newEdge1, newEdge2));
+                }
+            }
+            foreach(Triangle superTri in triangulation)
+            {
+                if(superTri.SuperTriCheck(tl) || superTri.SuperTriCheck(tr) || superTri.SuperTriCheck(bl))
+                    deadTriangles.Add(superTri);
+            }
+            foreach (Triangle deadTriangle in deadTriangles)
+                triangulation.Remove(deadTriangle);
         }
 
-        private void TestRoom(int newDirection, bool isCorridor)
+        private void TestRoom()
         {
             Rectangle testRoom = new Rectangle();
             Rectangle testRoomInner = new Rectangle();
             bool validRoom = true;
-            int yRandMax = 0;
-            int yRandMin = 0;
-            int xRandMax = 0;
-            int xRandMin = 0;
 
-            if (dngn_floorCheckY - 5 < 0)
-                yRandMax = 0;
-            else
-                yRandMax = dngn_floorCheckY - 5;
-
-            if (dngn_floorCheckY - 10 < 0)
-                yRandMin = 0;
-            else
-                yRandMin = dngn_floorCheckY - 10;
-
-            if (dngn_floorCheckX - 5 < 0)
-                xRandMax = 0;
-            else
-                xRandMax = dngn_floorCheckX - 5;
-
-            if (dngn_floorCheckX - 10 < 0)
-                xRandMin = 0;
-            else
-                xRandMin = dngn_floorCheckX - 10;
-
-            switch(newDirection)
-            {
-
-
-                case 1:
-                    if (isCorridor)
-                    {
-                        testRoom = new Rectangle(dngn_floorCheckX - 1, rand.Next(yRandMax), 3, 0);
-                        testRoom.Height = dngn_floorCheckY - testRoom.Y;
-                    }
-                    else
-                    {
-                        testRoom = new Rectangle(rand.Next(dngn_floorCheckX), rand.Next(yRandMin, yRandMax), 0, 0);
-                        testRoom.Width = rand.Next(dngn_floorCheckX - testRoom.X + 2, dngn_floorCheckX + 5);
-                        testRoom.Height = dngn_floorCheckY - testRoom.Y;
-                    }
-                    break;
-                case 2:
-                    if (isCorridor)
-                    {
-                        testRoom = new Rectangle(dngn_floorCheckX + 1, dngn_floorCheckY - 1, rand.Next(5,11), 3);
-                    }
-                    else
-                    {
-                        testRoom = new Rectangle(dngn_floorCheckX + 1, rand.Next(yRandMax), rand.Next(5, 11), 0);
-                        testRoom.Height = rand.Next(dngn_floorCheckY - testRoom.Y + 2, dngn_floorCheckY + 5);
-                    }
-                    break;
-                case 3:
-                    if (isCorridor)
-                    {
-                        testRoom = new Rectangle(dngn_floorCheckX - 1, dngn_floorCheckY + 1, 3, rand.Next(5, 11));
-                    }
-                    else
-                    {
-                        testRoom = new Rectangle(rand.Next(xRandMax), dngn_floorCheckY + 1, 0, rand.Next(5, 11));
-                        testRoom.Width = rand.Next(dngn_floorCheckX - testRoom.X + 2, dngn_floorCheckX + 5);
-                    }
-                    break;
-                case 4:
-                    if (isCorridor)
-                    {
-                        testRoom = new Rectangle(rand.Next(xRandMax), dngn_floorCheckY - 1, 0, 3);
-                        testRoom.Width = dngn_floorCheckX - testRoom.X;
-                    }
-                    else
-                    {
-                        testRoom = new Rectangle(rand.Next(xRandMin, xRandMax), rand.Next(dngn_floorCheckY), 0, 0);
-                        testRoom.Width = dngn_floorCheckX - testRoom.X;
-                        testRoom.Height = rand.Next(dngn_floorCheckY - testRoom.Y + 2, dngn_floorCheckY + 5);
-                    }
-                    break;
-            }
-
+            testRoom = MakeRectangle();
             testRoomInner = new Rectangle((int)testRoom.X + 1, (int)testRoom.Y + 1, (int)testRoom.Width - 2, (int)testRoom.Height - 2);
 
             foreach (Rectangle room in rooms)
@@ -209,50 +274,10 @@ namespace Dungeon
                 }
             }
 
-            if (validRoom) 
-            { 
+            if (validRoom)
+            {
                 MakeRoom(testRoom);
-                switch (newDirection)
-                {
-                    case 1:
-                        if (!_grid[dngn_floorCheckX, dngn_floorCheckY - 1].isEdge && !_grid[dngn_floorCheckX, dngn_floorCheckY - 2].isEdge)
-                        {
-                            Tile doorTile = _grid[dngn_floorCheckX, dngn_floorCheckY - 1];
-                            doorTile.tileName = "dngn_floor";
-                            doorTile.AddEntity("dngn_closed_door");
-                            doorTile.isWall = false;
-                        }
-                        break;
-                    case 2:
-                        if (!_grid[dngn_floorCheckX + 1, dngn_floorCheckY].isEdge && !_grid[dngn_floorCheckX + 2, dngn_floorCheckY].isEdge)
-                        {
-                            Tile doorTile = _grid[dngn_floorCheckX + 1, dngn_floorCheckY];
-                            doorTile.tileName = "dngn_floor";
-                            doorTile.AddEntity("dngn_closed_door");
-                            doorTile.isWall = false;
-                        }
-                        break;
-                    case 3:
-                        if(!_grid[dngn_floorCheckX, dngn_floorCheckY + 1].isEdge && !_grid[dngn_floorCheckX, dngn_floorCheckY + 2].isEdge)
-                        {
-                            Tile doorTile = _grid[dngn_floorCheckX, dngn_floorCheckY + 1];
-                            doorTile.tileName = "dngn_floor";
-                            doorTile.AddEntity("dngn_closed_door");
-                            doorTile.isWall = false;
-                        }
-                        break;
-                    case 4:
-                        if(!_grid[dngn_floorCheckX - 1, dngn_floorCheckY].isEdge && !_grid[dngn_floorCheckX - 2, dngn_floorCheckY].isEdge)
-                        {
-                            Tile doorTile = _grid[dngn_floorCheckX - 1, dngn_floorCheckY];
-                            doorTile.tileName = "dngn_floor";
-                            doorTile.AddEntity("dngn_closed_door");
-                            doorTile.isWall = false;
-                        }
-                        break;
-                }
             }
-
         }
 
         public void MakeRoom(Rectangle roomRect)
@@ -272,9 +297,23 @@ namespace Dungeon
                     }
                 }
 
-
             rooms.Add(roomRect);
+            roomNodes.Add(new Vector2(roomRect.Center.X, roomRect.Center.Y));
             walls -= (double)(roomRect.Width - 2) * (double)(roomRect.Height - 2);
+        }
+        public Rectangle MakeRectangle()
+        {
+
+            Rectangle newRect = new Rectangle(rand.Next(0, _grid.GetLength(0) - 5), rand.Next(1, _grid.GetLength(1) - 5), rand.Next(5, 11), rand.Next(5, 11));
+            if (newRect.X + newRect.Width - 1 > 24)
+            {
+                newRect.Width -= newRect.X + newRect.Width - 1 - 24;
+            }
+            if (newRect.Y + newRect.Height - 1 > 24)
+            {
+                newRect.Height -= newRect.Y + newRect.Height - 1 - 24;
+            }
+            return newRect;
         }
 
         public Tile[,] grid

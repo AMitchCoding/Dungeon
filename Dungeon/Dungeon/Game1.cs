@@ -598,6 +598,20 @@ namespace Dungeon
                 }
             }
 
+            if (newState.IsKeyDown(Keys.F10))
+            {
+                if (!oldState.IsKeyDown(Keys.F10))
+                {
+                    for (int x = 0; x < 25; x++)
+                    {
+                        for (int y = 0; y < 25; y++)
+                        {
+                            level.grid[x, y].visible = true;
+                        }
+                    }
+                }
+            }
+
             if (newMouseState.LeftButton == ButtonState.Pressed)
             {
                 if (oldMouseState.LeftButton != ButtonState.Pressed)
