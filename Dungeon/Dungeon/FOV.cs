@@ -6,6 +6,9 @@ using Microsoft.Xna.Framework;
 
 namespace Dungeon
 {
+    /// <summary>
+    /// Used to determin what the player can see
+    /// </summary>
     class FOV
     {
         Tile[,] _grid;

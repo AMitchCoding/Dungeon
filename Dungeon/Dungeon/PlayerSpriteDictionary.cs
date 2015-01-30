@@ -6,6 +6,9 @@ using Microsoft.Xna.Framework;
 
 namespace Dungeon
 {
+    /// <summary>
+    /// List of items, armors, races, weapons, and foci
+    /// </summary>
     class PlayerSpriteDictionary
     {
         Dictionary<String, Vector4> _characters = new Dictionary<string, Vector4>();
@@ -630,6 +633,11 @@ namespace Dungeon
 
         }
 
+        /// <summary>
+        /// Returns the rectangle of the chosen race sprite
+        /// </summary>
+        /// <param name="raceName">Name of race being used</param>
+        /// <returns>Rectangle of race sprite from sprite sheet</returns>
         public Rectangle GetSprite(String raceName)
         {
             Rectangle sprite = new Rectangle((int)_characters[raceName].X, (int)_characters[raceName].Y, 
@@ -638,6 +646,11 @@ namespace Dungeon
             return sprite;
         }
 
+        /// <summary>
+        /// Returns the rectangle of the item sprite
+        /// </summary>
+        /// <param name="spriteLoc">Location of sprite on sprite sheet</param>
+        /// <returns>Rectangle of item sprite from the sprite sheet</returns>
         public Rectangle GetSprite(Vector4 spriteLoc)
         {
             Rectangle sprite = new Rectangle((int)spriteLoc.X, (int)spriteLoc.Y,
@@ -646,18 +659,41 @@ namespace Dungeon
             return sprite;
         }
 
+        /// <summary>
+        /// Gets an item from the list of items
+        /// </summary>
+        /// <param name="item">The item to get</param>
+        /// <returns>An item to be used</returns>
         public Item GetItem(String item)
         {
             return this._itemDictionary[item];
         }
+
+        /// <summary>
+        /// Gets a weapon from the list of weapons
+        /// </summary>
+        /// <param name="item">The weapon to get</param>
+        /// <returns>A weapon to be used</returns>
         public Weapon GetWeapon(String item)
         {
             return this._weaponDictionary[item];
         }
+
+        /// <summary>
+        /// Gets an armor from the list of armors
+        /// </summary>
+        /// <param name="item">The armor to get</param>
+        /// <returns>An armor to be used</returns>
         public Armor GetArmor(String item)
         {
             return this._armorDictionary[item];
         }
+
+        /// <summary>
+        /// Gets a focus from the list of foci
+        /// </summary>
+        /// <param name="item">The focus to get</param>
+        /// <returns>A focus to be used</returns>
         public Focus GetFocus(String item)
         {
             return this._focusDictionary[item];

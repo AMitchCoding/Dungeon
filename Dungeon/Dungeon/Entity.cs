@@ -7,6 +7,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Dungeon
 {
+    /// <summary>
+    /// Things that are alive
+    /// </summary>
     class Entity
     {
         Random rand = new Random();
@@ -28,22 +31,38 @@ namespace Dungeon
 
         }
 
+        /// <summary>
+        /// Current health property
+        /// </summary>
         public int health
         {
             set { this._health = value; }
             get { return this._health; }
         }
+
+        /// <summary>
+        /// Maximum health property
+        /// </summary>
         public int maxHealth
         {
             set { this._maxHealth = value; }
             get { return this._maxHealth; }
         }
+
+        /// <summary>
+        /// Name property
+        /// </summary>
         public string name
         {
             set { this._name = value; }
             get { return this._name; }
         }
 
+        /// <summary>
+        /// Gets the amount of damage done during Fight()
+        /// </summary>
+        /// <remarks>Based on formula used by Ragnarok Online</remarks>
+        /// <returns>Integer of damage</returns>
         public int GetDamage()
         {
             int damage = (int)(this._strength + (this._strength/10)^2 + (_dexterity/5) + (_luck/5) + rand.Next(Math.Min(_dexterity,_baseAttack), _baseAttack));
@@ -51,6 +70,9 @@ namespace Dungeon
             return damage;
         }
 
+        /// <summary>
+        /// Creates an inventory
+        /// </summary>
         private void InitInventory()
         {
             this._entityItems.Add("head", null);
@@ -67,12 +89,23 @@ namespace Dungeon
             }
         }
 
+        /// <summary>
+        /// Current location Property
+        /// </summary>
         public Vector2 location
         {
             set { this._location = value; }
             get { return this._location; }
         }
 
+        /// <summary>
+        /// Determines movement
+        /// </summary>
+        /// <param name="move">Direction of move</param>
+        /// <param name="grid">Dungeon floor</param>
+        /// <param name="type">Type of move (one space, five spaces, or as far as possible)</param>
+        /// <param name="moveToList">List of moves to be made</param>
+        /// <returns>List of moves</returns>
         public List<Vector2> Movement(Vector2 move, Tile[,] grid, string type, List<Vector2> moveToList)
         {
             Tile destTile = grid[(int)(this._location.X + move.X), (int)(this._location.Y + move.Y)];
@@ -102,6 +135,12 @@ namespace Dungeon
             return moveToList;
         }
 
+        /// <summary>
+        /// Moves the player in the chosen direction
+        /// </summary>
+        /// <param name="move">Chosen direction</param>
+        /// <param name="grid">Dungeon floor</param>
+        /// <returns>True if successful</returns>
         public bool MovePlayer(Vector2 move, Tile[,] grid)
         {
             Vector2 newLocation = this._location + move;
@@ -131,6 +170,11 @@ namespace Dungeon
             return validMove;
         }
 
+        /// <summary>
+        /// Goes down stairs
+        /// </summary>
+        /// <param name="grid">Dungeon floor</param>
+        /// <returns>True if standing on stairs down</returns>
         public bool MoveDown(Tile[,] grid)
         {
             Tile currentTile = grid[(int)this._location.X, (int)this._location.Y];
@@ -140,6 +184,11 @@ namespace Dungeon
                 return false;
         }
 
+        /// <summary>
+        /// Goes up stairs
+        /// </summary>
+        /// <param name="grid">Dungeon floor</param>
+        /// <returns>True if standing on stairs up</returns>
         public bool MoveUp(Tile[,] grid)
         {
             Tile currentTile = grid[(int)this._location.X, (int)this._location.Y];
@@ -149,6 +198,12 @@ namespace Dungeon
                 return false;
         }
 
+        /// <summary>
+        /// Mouse movement based on A* algorithm
+        /// </summary>
+        /// <param name="moveTo">Tile to move to</param>
+        /// <param name="grid">Dungeon floor</param>
+        /// <returns>List of moves</returns>
         public List<Vector2> MoveTo(Vector2 moveTo, Tile[,] grid)
         {
             Tile newTile = grid[(int)moveTo.X, (int)moveTo.Y];  //move to

@@ -9,6 +9,11 @@ namespace Dungeon
 {
     static class Combat
     {
+        /// <summary>
+        /// Method to determin damage done
+        /// </summary>
+        /// <param name="combatant1">First combatant</param>
+        /// <param name="combatant2">Second combatant</param>
         public static void Fight(Entity combatant1, Entity combatant2)
         {
             combatant1.health -= combatant2.GetDamage();

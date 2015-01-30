@@ -17,18 +17,17 @@ namespace Dungeon
         List<NPC> _npcs = new List<NPC>();
         List<Vector2> roomNodes = new List<Vector2>();
         List<Triangle> triangulation = new List<Triangle>();
-        List<Triangle> deadTriangles = new List<Triangle>();
         List<Edge> edgesMST = new List<Edge>();
-        CircleTest tester = new CircleTest();
-        Vector2 tl = new Vector2(0, 0);
-        Vector2 tr = new Vector2(50, 0);
-        Vector2 bl = new Vector2(0, 50);
         private Tile[,] _grid = new Tile[25,25];
         List<int> possibleDoors = new List<int>();
         int attempts = 1;
         double dungeonArea = 625.0;
         double walls = 625.0;
 
+        /// <summary>
+        /// Dungeon Constructor
+        /// </summary>
+        /// <param name="npcDictionary">List of npcs</param>
         public Dungeon(NPCDictionary npcDictionary)
         {
             this._npcs.Add(new NPC(npcDictionary.GetNPC("mons_asmodeus")));
@@ -87,12 +86,16 @@ namespace Dungeon
                 }
             }
         }
+        /// <summary>
+        /// Find Minimum Spanning Tree</summary>
         private void MSTGeneration()
         {
             HashSet<Edge> edges = new HashSet<Edge>();
             Stack<Edge> sortEdges = new Stack<Edge>();
             int addedEdges = 0;
-            foreach (Triangle triangle in triangulation)
+            
+            //Find all edges in triangulation
+            foreach (Triangle triangle in triangulation) 
             {
                 foreach (Edge edge in triangle.edges)
                 {
@@ -100,6 +103,7 @@ namespace Dungeon
                 }
             }
 
+            //Sort edges by length
             while (edges.Count > 0)
             {
                 Edge nextEdge = null;
@@ -114,8 +118,9 @@ namespace Dungeon
                 edges.Remove(nextEdge);
             }
 
-            List<Edge> transEdges = new List<Edge>();
+            List<Edge> badEdges = new List<Edge>();
 
+            //Check each to see if it should be added to the MST
             while(addedEdges < roomNodes.Count - 1)
             {
                 Edge testEdge = null;
@@ -123,61 +128,75 @@ namespace Dungeon
                 List<Edge> tempEdges = new List<Edge>();
 
                 testEdge = sortEdges.Pop();
-                testEdge.FindAdjacentEdges(edgesMST);
 
-                if (!testEdge.CheckTransEdge(transEdges))
+                //If it's not part of bad edges add to MST and future bad edges list
+                if (!testEdge.CheckBadEdges(badEdges))
                 {
                     edgesMST.Add(testEdge);
-                    transEdges.Add(testEdge);
+                    badEdges.Add(testEdge);
                     addedEdges++;
+                  
+                }
 
-                    int countOut = 0;
-                    int countIn = 0;
-
-                    while(countOut < transEdges.Count)
+                //Check if a bad edge can be added via the transitivity
+                int countOut = 0;
+                int countIn = 0;  
+                while (countOut < badEdges.Count)
+                {
+                    countIn = countOut + 1;
+                    while (countIn < badEdges.Count)
                     {
-                        countIn = countOut + 1;
-                        while(countIn < transEdges.Count)
+                        if (!badEdges[countOut].CompareEdge(badEdges[countIn]))
                         {
-                            if (!transEdges[countOut].CompareEdge(transEdges[countIn]))
+                            if (badEdges[countOut].vA.Equals(badEdges[countIn].vA))
                             {
-                                if (transEdges[countOut].vA.Equals(transEdges[countIn].vA))
-                                {
-                                    tempEdge = new Edge(transEdges[countOut].vB, transEdges[countIn].vB);
-                                    if (!tempEdge.CheckTransEdge(transEdges) && !tempEdge.CheckTransEdge(tempEdges))
-                                        tempEdges.Add(tempEdge);
-                                }
-                                else if (transEdges[countOut].vA.Equals(transEdges[countIn].vB))
-                                {
-                                    tempEdge = new Edge(transEdges[countOut].vB, transEdges[countIn].vA);
-                                    if (!tempEdge.CheckTransEdge(transEdges) && !tempEdge.CheckTransEdge(tempEdges))
-                                        tempEdges.Add(tempEdge);
-                                }
-                                else if (transEdges[countOut].vB.Equals(transEdges[countIn].vA))
-                                {
-                                    tempEdge = new Edge(transEdges[countOut].vA, transEdges[countIn].vB);
-                                    if (!tempEdge.CheckTransEdge(transEdges) && !tempEdge.CheckTransEdge(tempEdges))
-                                        tempEdges.Add(tempEdge);
-                                }
-                                else if (transEdges[countOut].vB.Equals(transEdges[countIn].vB))
-                                {
-                                    tempEdge = new Edge(transEdges[countOut].vA, transEdges[countIn].vA);
-                                    if (!tempEdge.CheckTransEdge(transEdges) && !tempEdge.CheckTransEdge(tempEdges))
-                                        tempEdges.Add(tempEdge);
-                                }
-
+                                tempEdge = new Edge(badEdges[countOut].vB, badEdges[countIn].vB);
+                                if (!tempEdge.CheckBadEdges(badEdges) && !tempEdge.CheckBadEdges(tempEdges))
+                                    tempEdges.Add(tempEdge);
                             }
-                            countIn++;
+                            else if (badEdges[countOut].vA.Equals(badEdges[countIn].vB))
+                            {
+                                tempEdge = new Edge(badEdges[countOut].vB, badEdges[countIn].vA);
+                                if (!tempEdge.CheckBadEdges(badEdges) && !tempEdge.CheckBadEdges(tempEdges))
+                                    tempEdges.Add(tempEdge);
+                            }
+                            else if (badEdges[countOut].vB.Equals(badEdges[countIn].vA))
+                            {
+                                tempEdge = new Edge(badEdges[countOut].vA, badEdges[countIn].vB);
+                                if (!tempEdge.CheckBadEdges(badEdges) && !tempEdge.CheckBadEdges(tempEdges))
+                                    tempEdges.Add(tempEdge);
+                            }
+                            else if (badEdges[countOut].vB.Equals(badEdges[countIn].vB))
+                            {
+                                tempEdge = new Edge(badEdges[countOut].vA, badEdges[countIn].vA);
+                                if (!tempEdge.CheckBadEdges(badEdges) && !tempEdge.CheckBadEdges(tempEdges))
+                                    tempEdges.Add(tempEdge);
+                            }
+
                         }
-                        countOut++;
+                        countIn++;
                     }
-                    transEdges.AddRange(tempEdges);
-                }                
+                    countOut++;
+                }
+                badEdges.AddRange(tempEdges);
             }
         }
+
+        /// <summary>
+        ///Create Delaunay Triangulation </summary>
+        ///<remarks>Used as an undirected graph to find MST
+        ///Uses the empty circle property</remarks>
         private void DTGeneration()
         {
+            Vector2 tl = new Vector2(0, 0);
+            Vector2 tr = new Vector2(50, 0);
+            Vector2 bl = new Vector2(0, 50);
+            List<Triangle> deadTriangles = new List<Triangle>();
+            CircleTest tester = new CircleTest();
+
+            //Create base triangle
             triangulation.Add(new Triangle(new Edge(tl, tr), new Edge(tl, bl), new Edge(tr, bl)));
+
             foreach (Vector2 point in roomNodes)
             {
                 List<Triangle> badTriangles = new List<Triangle>();
@@ -238,6 +257,8 @@ namespace Dungeon
                     triangulation.Add(new Triangle(polyEdge, newEdge1, newEdge2));
                 }
             }
+
+
             foreach(Triangle superTri in triangulation)
             {
                 if(superTri.SuperTriCheck(tl) || superTri.SuperTriCheck(tr) || superTri.SuperTriCheck(bl))
@@ -247,6 +268,9 @@ namespace Dungeon
                 triangulation.Remove(deadTriangle);
         }
 
+        /// <summary>
+        /// Create potential room for intersections
+        /// </summary>
         private void TestRoom()
         {
             Rectangle testRoom = new Rectangle();
@@ -270,6 +294,10 @@ namespace Dungeon
             }
         }
 
+        /// <summary>
+        /// Add room to room list.
+        /// </summary>
+        /// <param name="roomRect">Rectangle of the room to be added</param>
         public void MakeRoom(Rectangle roomRect)
         {            
             for (int x = 0; x < 25; x++)
@@ -291,6 +319,10 @@ namespace Dungeon
             roomNodes.Add(new Vector2(roomRect.Center.X, roomRect.Center.Y));
             walls -= (double)(roomRect.Width - 2) * (double)(roomRect.Height - 2);
         }
+
+        /// <summary>
+        /// Gets a rectangle that fits the dungeon
+        /// </summary>
         public Rectangle MakeRectangle()
         {
 
@@ -306,20 +338,33 @@ namespace Dungeon
             return newRect;
         }
 
+        /// <summary>
+        /// Dungeon grid property
+        /// </summary>
         public Tile[,] grid
         {
             get { return this._grid; }
         }
+
+        /// <summary>
+        /// NPCs in the dungeon
+        /// </summary>
         public List<NPC> npcs
         {
             get { return this._npcs; }
         }
 
+        /// <summary>
+        /// Location of dungeon's upstairs
+        /// </summary>
         public Tile upStairs
         {
             get { return this._upStairs; }
         }
 
+        /// <summary>
+        /// Location of dungeon's downstairs
+        /// </summary>
         public Tile downStairs
         {
             get { return this._downStairs; }

@@ -11,6 +11,13 @@ namespace Dungeon
         List<Edge> _edges = new List<Edge>();
         Edge _eA, _eB, _eC;
         Vector2 _vA, _vB, _vC;
+
+        /// <summary>
+        /// Triangle constructor
+        /// </summary>
+        /// <param name="a">Edge A</param>
+        /// <param name="b">Edge B</param>
+        /// <param name="c">Edge C</param>
         public Triangle(Edge a, Edge b, Edge c)
         {
             this._eA = a;
@@ -35,18 +42,34 @@ namespace Dungeon
             else
                 return false;
         }
+
+        /// <summary>
+        /// Point A
+        /// </summary>
         public Vector2 vA
         {
             get { return this._vA; }
         }
+
+        /// <summary>
+        /// Point B
+        /// </summary>
         public Vector2 vB
         {
             get { return this._vB; }
         }
+
+        /// <summary>
+        /// Point C
+        /// </summary>
         public Vector2 vC
         {
             get { return this._vC; }
         }
+
+        /// <summary>
+        /// Triangles edges
+        /// </summary>
         public List<Edge> edges
         {
             get { return this._edges; }

@@ -6,6 +6,9 @@ using Microsoft.Xna.Framework;
 
 namespace Dungeon
 {
+    /// <summary>
+    /// List of NPC types and their info
+    /// </summary>
     class NPCDictionary
     {
         Dictionary<String, NPC> _NPCSprites = new Dictionary<String, NPC>();
@@ -357,6 +360,11 @@ namespace Dungeon
             _NPCSprites.Add("mons_water_elemental", new NPC(new Vector2(4, 25), 100, 1, 0, 0, "empty"));
         }
 
+        /// <summary>
+        /// Returns an NPC type
+        /// </summary>
+        /// <param name="monsterName">Name of NPC type</param>
+        /// <returns>An NPC</returns>
         public NPC GetNPC(String monsterName)
         {
             return this._NPCSprites[monsterName];

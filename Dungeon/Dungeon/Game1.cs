@@ -239,6 +239,9 @@ namespace Dungeon
             base.Draw(gameTime);
         }
 
+        /// <summary>
+        /// Get input for commands
+        /// </summary>
         private void UpdateInput()
         {
             KeyboardState newState = Keyboard.GetState();
@@ -634,6 +637,9 @@ namespace Dungeon
             oldMouseState = newMouseState;
         }
 
+        /// <summary>
+        /// Get input for menu commands
+        /// </summary>
         private void MenuInput()
         {
 

@@ -6,12 +6,23 @@ using Microsoft.Xna.Framework;
 
 namespace Dungeon
 {
+    /// <summary>
+    /// Edge used in minimum spanning tree logic
+    /// </summary>
     class Edge
     {
         Vector2 _vA, _vB;
         float _weight;
-        List<Edge> _adjMSTEdges = new List<Edge>();
         bool hasAdj = false;
+
+        /// <summary>
+        /// Edge constructor
+        /// </summary>
+        /// <remarks>Edge points are determined in the following order
+        /// Smallest x value of points
+        /// Smallest y value of points</remarks>
+        /// <param name="a">Edge point a</param>
+        /// <param name="b">Edge point b</param>
         public Edge(Vector2 a, Vector2 b)
         {
             if (a.X < b.X)
@@ -44,6 +55,11 @@ namespace Dungeon
             this._weight = Vector2.Distance(this._vA, this._vB);
         }
 
+        /// <summary>
+        /// Compares this edge to another edge to see if they are the same
+        /// </summary>
+        /// <param name="testEdge">Edge to check for eqaulity</param>
+        /// <returns>True if edges are the same</returns>
         public bool CompareEdge(Edge testEdge)
         {
             if (this._vA.Equals(testEdge.vA) && this._vB.Equals(testEdge.vB))
@@ -52,6 +68,10 @@ namespace Dungeon
                 return false;
         }
 
+        /// <summary>
+        /// Gets a list of the edge's points
+        /// </summary>
+        /// <returns>List of Vector 2s</returns>
         public List<Vector2> VertexList()
         {
             List<Vector2> vList = new List<Vector2>();
@@ -60,19 +80,12 @@ namespace Dungeon
             return vList;
         }
 
-        public void FindAdjacentEdges(List<Edge> edges)
-        {
-            foreach (Edge nextEdge in edges)
-            {
-                if (nextEdge.VertexList().Contains(this._vA) ||
-                    nextEdge.VertexList().Contains(this._vB))
-                {
-                    this._adjMSTEdges.Add(nextEdge);
-                }
-            }
-        }
-
-        public bool CheckTransEdge(List<Edge> edges)
+        /// <summary>
+        /// Checks this edge to see if it is in the list of bad edges
+        /// </summary>
+        /// <param name="edges">List of bad edges</param>
+        /// <returns>True if it is in the list</returns>
+        public bool CheckBadEdges(List<Edge> edges)
         {
             foreach (Edge edge in edges)
             {
@@ -81,21 +94,28 @@ namespace Dungeon
             }
             return false;
         }
+
+        /// <summary>
+        /// A point property
+        /// </summary>
         public Vector2 vA
         {
             get { return this._vA; }
         }
+        /// <summary>
+        /// B point property
+        /// </summary>
         public Vector2 vB
         {
             get { return this._vB; }
         }
+
+        /// <summary>
+        /// Weight property
+        /// </summary>
         public float weight
         {
             get { return this._weight; }
-        }
-        public List<Edge> adjMSTEdges
-        {
-            get { return this._adjMSTEdges; }
         }
     }
 }

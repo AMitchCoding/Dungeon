@@ -6,9 +6,20 @@ using Microsoft.Xna.Framework;
 
 namespace Dungeon
 {
+    /// <summary>
+    /// Testing object to help find Delaunay triangulation using Empty Circle Property
+    /// </summary>
     class CircleTest
     {
-
+        /// <summary>
+        /// Circle Testing constructor
+        /// </summary>
+        /// <remarks>Algorithm from http://csharphelper.com/blog/2014/08/draw-a-circle-through-three-points-in-c/</remarks>
+        /// <param name="a">Side A of triangle</param>
+        /// <param name="b">Side B of triangle</param>
+        /// <param name="c">Side C of triangle</param>
+        /// <param name="p">Point being compared to triangle</param>
+        /// <returns></returns>
         public bool CircleTester(Vector2 a, Vector2 b, Vector2 c, Vector2 p)
         {
             // Get the perpendicular bisector of (x1, y1) and (x2, y2).

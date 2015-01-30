@@ -6,6 +6,9 @@ using Microsoft.Xna.Framework;
 
 namespace Dungeon
 {
+    /// <summary>
+    /// List of tiles and their location on the sprite sheet
+    /// </summary>
     class TileDictionary
     {
         Dictionary<String, Vector2> _tiles = new Dictionary<string, Vector2>();
@@ -595,6 +598,11 @@ namespace Dungeon
             _tiles.Add("corpse_yellow_wasp", new Vector2(2, 29));
         }
 
+        /// <summary>
+        /// Gets the tile to draw
+        /// </summary>
+        /// <param name="tileName">Name of the tile</param>
+        /// <returns>Location of tile on the sprite sheet</returns>
         public Vector2 GetTile(String tileName)
         {
             return this._tiles[tileName];

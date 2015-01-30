@@ -14,6 +14,10 @@ namespace Dungeon
         SpellDictionary _playerSpellDictionary = new SpellDictionary();
         string _playerRace;
         
+        /// <summary>
+        /// Player constructor
+        /// </summary>
+        /// <param name="startPos">Starting location of player on dungeon floor</param>
         public Player(Tile startPos)
         {
 
@@ -46,6 +50,11 @@ namespace Dungeon
         {
         }
 
+        /// <summary>
+        /// Checks for nearby monsters
+        /// </summary>
+        /// <param name="grid">Dungeon floor</param>
+        /// <returns>True if monster is visible</returns>
         public bool MonsterCheck(Tile[,] grid)
         {
             Tile tile = null;
@@ -77,6 +86,12 @@ namespace Dungeon
             return false;
         }
 
+        /// <summary>
+        /// Draws player and visible armor
+        /// </summary>
+        /// <param name="spriteBatch">Sprite batch being used to draw</param>
+        /// <param name="tileTexture">Sprite sheet</param>
+        /// <param name="destination">Place to draw player</param>
         internal void DrawPlayer(SpriteBatch spriteBatch, Texture2D tileTexture, Vector2 destination)
         {
             spriteBatch.Draw(tileTexture, destination, _playerSpriteSheet.GetSprite("shadow"), Color.White);
