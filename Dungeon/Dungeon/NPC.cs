@@ -62,7 +62,7 @@ namespace Dungeon
             this._tile = npc.tile;
             this._name = npc.name;
             this._health = npc.health;
-            this._baseAttack = npc.attack;
+            this._baseAttack = npc.baseAttack;
             this._baseDefense = npc.baseDefense;
             this._difficulty = npc.difficulty;
             this._corpse = npc.corpse;
