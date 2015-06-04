@@ -8,8 +8,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Dungeon")]
 [assembly: AssemblyProduct("Dungeon")]
 [assembly: AssemblyDescription("")]
-[assembly: AssemblyCompany("ITSD")]
-[assembly: AssemblyCopyright("Copyright © ITSD 2014")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

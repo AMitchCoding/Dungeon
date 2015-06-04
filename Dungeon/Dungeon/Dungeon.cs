@@ -8,7 +8,7 @@ namespace Dungeon
 {
     class Dungeon
     {
-        //Random rand = new Random((int)DateTime.Now.Ticks);
+        Random rand2 = new Random((int)DateTime.Now.Ticks);
         Random rand = new Random(2);
         List<Rectangle> rooms = new List<Rectangle>();
         Tile _upStairs;
@@ -71,6 +71,41 @@ namespace Dungeon
 
             DTGeneration();
             MSTGeneration();
+                        
+            foreach (Edge edge in edgesMST)
+            {
+                Rectangle roomA = new Rectangle(0,0,0,0);
+                Rectangle roomB = new Rectangle(0,0,0,0);
+                Rectangle doorWall;
+                foreach(Rectangle room in rooms)
+                {
+                    if (room.Contains((int)edge.vA.X, (int)edge.vA.Y))
+                    {
+                        roomA = room;
+                        continue;
+                    }
+                    if (room.Contains((int)edge.vB.X, (int)edge.vB.Y))
+                    {
+                        roomB = room;
+                    }
+                }
+
+                if (roomA.Intersects(roomB))
+                {
+                    doorWall = Rectangle.Intersect(roomA, roomB);
+                    Tile newDoor = new Tile(new Vector2(0,0));
+                    if (doorWall.Width == 1)
+                            newDoor = this._grid[doorWall.X, rand.Next(doorWall.Y, doorWall.Y + doorWall.Height)];
+                        else if (doorWall.Height == 1)
+                            newDoor = this._grid[rand.Next(doorWall.X + 1, doorWall.X + doorWall.Width - 2), doorWall.Y];                    
+
+                    if (doorWall.Width == 1)
+                            newDoor.CreateDoor();
+                        else if (doorWall.Height == 1)
+                            newDoor.CreateDoor();
+                }
+
+            }
 
             foreach (NPC monster in _npcs)
             {

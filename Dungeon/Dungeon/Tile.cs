@@ -145,6 +145,17 @@ namespace Dungeon
         }
 
         /// <summary>
+        /// Creates door on tile
+        /// </summary>
+        public void CreateDoor()
+        {
+            this._entities.Add("dngn_closed_door");
+            this._isWall = false;
+            this._tileName = "dngn_floor";
+        }
+
+
+        /// <summary>
         /// Opens door on tile
         /// </summary>
         /// <returns>True if door is closed</returns>
