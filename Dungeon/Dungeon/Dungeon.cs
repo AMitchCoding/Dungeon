@@ -8,9 +8,10 @@ namespace Dungeon
 {
     class Dungeon
     {
-        Random rand2 = new Random((int)DateTime.Now.Ticks);
-        Random rand = new Random(2);
+        //Random rand = new Random((int)DateTime.Now.Ticks);
+        Random rand = new Random(3);
         List<Rectangle> rooms = new List<Rectangle>();
+        int SIZE = 50;
         Tile _upStairs;
         Tile _downStairs;
         Tile _monsTile;
@@ -18,11 +19,11 @@ namespace Dungeon
         List<Vector2> roomNodes = new List<Vector2>();
         List<Triangle> triangulation = new List<Triangle>();
         List<Edge> edgesMST = new List<Edge>();
-        private Tile[,] _grid = new Tile[25,25];
+        private Tile[,] _grid;
         List<int> possibleDoors = new List<int>();
         int attempts = 1;
-        double dungeonArea = 625.0;
-        double walls = 625.0;
+        double dungeonArea = 2500.0;
+        double walls = 2500.0;
 
         /// <summary>
         /// Dungeon Constructor
@@ -30,21 +31,22 @@ namespace Dungeon
         /// <param name="npcDictionary">List of npcs</param>
         public Dungeon(NPCDictionary npcDictionary)
         {
+            this._grid = new Tile[SIZE, SIZE];
             this._npcs.Add(new NPC(npcDictionary.GetNPC("mons_asmodeus")));
             this._npcs.Add(new NPC(npcDictionary.GetNPC("mons_cerebov")));
             this._npcs.Add(new NPC(npcDictionary.GetNPC("mons_glowing_shapeshifter")));
-            for (int x = 0; x < 25; x++)
+            for (int x = 0; x < SIZE; x++)
             {
-                for (int y = 0; y < 25; y++)
+                for (int y = 0; y < SIZE; y++)
                 {
                     _grid[x, y] = new Tile(new Vector2(x,y));
-                    if (x == 0 || y == 0 || x == 24 || y == 24)
+                    if (x == 0 || y == 0 || x == SIZE - 1 || y == SIZE - 1)
                         _grid[x, y].isEdge = true;
                 }
             }
             MakeRoom(MakeRectangle());
 
-            while (((walls / dungeonArea) > .50) && attempts != 5000)
+            while (((walls / dungeonArea) > .50) && attempts != 5000000)
             {
                 TestRoom();
                 attempts++;
@@ -52,7 +54,7 @@ namespace Dungeon
 
             while (true)
             {
-                _upStairs = _grid[rand.Next(25), rand.Next(25)];
+                _upStairs = _grid[rand.Next(SIZE), rand.Next(SIZE)];
                 if (_upStairs.tileName == "dngn_floor" && _upStairs.entities.Count() == 0)
                 {
                     _upStairs.AddEntity("dngn_stone_stairs_up");
@@ -61,7 +63,7 @@ namespace Dungeon
             }
             while (true)
             {
-                _downStairs = _grid[rand.Next(25), rand.Next(25)];
+                _downStairs = _grid[rand.Next(SIZE), rand.Next(SIZE)];
                 if (_downStairs.tileName == "dngn_floor" && _downStairs.entities.Count() == 0)
                 {
                     _downStairs.AddEntity("dngn_stone_stairs_down");
@@ -93,16 +95,10 @@ namespace Dungeon
                 if (roomA.Intersects(roomB))
                 {
                     doorWall = Rectangle.Intersect(roomA, roomB);
-                    Tile newDoor = new Tile(new Vector2(0,0));
                     if (doorWall.Width == 1)
-                            newDoor = this._grid[doorWall.X, rand.Next(doorWall.Y, doorWall.Y + doorWall.Height)];
+                            this._grid[doorWall.X, rand.Next(doorWall.Y, doorWall.Y + doorWall.Height)].CreateDoor();
                         else if (doorWall.Height == 1)
-                            newDoor = this._grid[rand.Next(doorWall.X + 1, doorWall.X + doorWall.Width - 2), doorWall.Y];                    
-
-                    if (doorWall.Width == 1)
-                            newDoor.CreateDoor();
-                        else if (doorWall.Height == 1)
-                            newDoor.CreateDoor();
+                            this._grid[rand.Next(doorWall.X + 1, doorWall.X + doorWall.Width - 2), doorWall.Y].CreateDoor();                    
                 }
 
             }
@@ -111,7 +107,7 @@ namespace Dungeon
             {
                 while (true)
                 {
-                    _monsTile = _grid[rand.Next(25), rand.Next(25)];
+                    _monsTile = _grid[rand.Next(SIZE), rand.Next(SIZE)];
                     if (_monsTile.tileName == "dngn_floor" && _monsTile.entities.Count() == 0 && _monsTile.npc == null)
                     {
                         monster.location = _monsTile.tilePos;
@@ -224,8 +220,8 @@ namespace Dungeon
         private void DTGeneration()
         {
             Vector2 tl = new Vector2(0, 0);
-            Vector2 tr = new Vector2(50, 0);
-            Vector2 bl = new Vector2(0, 50);
+            Vector2 tr = new Vector2(SIZE*2, 0);
+            Vector2 bl = new Vector2(0, SIZE*2);
             List<Triangle> deadTriangles = new List<Triangle>();
             CircleTest tester = new CircleTest();
 
@@ -317,7 +313,7 @@ namespace Dungeon
 
             foreach (Rectangle room in rooms)
             {
-                if (testRoomInner.Intersects(room) || testRoom.Width < 3 || testRoom.Height < 3)
+                if (testRoomInner.Intersects(room))
                 {
                     validRoom = false;
                 }
@@ -334,10 +330,10 @@ namespace Dungeon
         /// </summary>
         /// <param name="roomRect">Rectangle of the room to be added</param>
         public void MakeRoom(Rectangle roomRect)
-        {            
-            for (int x = 0; x < 25; x++)
+        {
+            for (int x = 0; x < SIZE; x++)
                 {
-                    for (int y = 0; y < 25; y++)
+                    for (int y = 0; y < SIZE; y++)
                     {
                         if ((x >= roomRect.Left + 1 && x < roomRect.Width - 1 + roomRect.Left) &&
                             (y >= roomRect.Top + 1 && y < roomRect.Height - 1 + roomRect.Top) &&
@@ -361,14 +357,14 @@ namespace Dungeon
         public Rectangle MakeRectangle()
         {
 
-            Rectangle newRect = new Rectangle(rand.Next(0, _grid.GetLength(0) - 5), rand.Next(1, _grid.GetLength(1) - 5), rand.Next(5, 11), rand.Next(5, 11));
-            if (newRect.X + newRect.Width - 1 > 24)
+            Rectangle newRect = new Rectangle(rand.Next(0, _grid.GetLength(0) - 7), rand.Next(0, _grid.GetLength(1) - 7), rand.Next(7, 30), rand.Next(7, 30));
+            if (newRect.Right > SIZE)
             {
-                newRect.Width -= newRect.X + newRect.Width - 1 - 24;
+                newRect.Width = SIZE - 1 - newRect.X;
             }
-            if (newRect.Y + newRect.Height - 1 > 24)
+            if (newRect.Bottom > SIZE)
             {
-                newRect.Height -= newRect.Y + newRect.Height - 1 - 24;
+                newRect.Height = SIZE - 1 - newRect.Y;
             }
             return newRect;
         }

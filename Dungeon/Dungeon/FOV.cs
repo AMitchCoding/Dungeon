@@ -14,7 +14,7 @@ namespace Dungeon
         Tile[,] _grid;
         Vector2 _location;
         List<int> _octants = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8 };
-        int VIEW_DISTANCE = 5;
+        int VIEW_DISTANCE = 9;
 
         public FOV(Tile[,] grid, Vector2 location)
         {

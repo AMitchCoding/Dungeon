@@ -9,7 +9,7 @@ namespace Dungeon
     class Tile
     {
         private bool _isEdge = false;
-        private bool _isWall = true;
+        private bool _isWall = false;
         private bool _sightBlocker = true;
         private bool _visible = false;
         private bool _seen = false;

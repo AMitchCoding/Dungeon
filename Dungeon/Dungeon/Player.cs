@@ -13,6 +13,7 @@ namespace Dungeon
         PlayerSpriteDictionary _playerSpriteSheet = new PlayerSpriteDictionary();
         SpellDictionary _playerSpellDictionary = new SpellDictionary();
         string _playerRace;
+        Vector2 _screenLocation = new Vector2(0, 0);
         
         /// <summary>
         /// Player constructor
@@ -84,6 +85,25 @@ namespace Dungeon
                 }
             }
             return false;
+        }
+        public Vector2 screenLocation
+        {
+            get 
+            {
+                if (this._location.X > 12 && this._location.X <= 37)
+                    this._screenLocation.X = 12;
+                else if (this._location.X > 37)
+                    this._screenLocation.X = this._location.X - 25;
+                else
+                    this._screenLocation.X = this._location.X;
+                if (this._location.Y > 12 && this._location.Y <= 37)
+                    this._screenLocation.Y = 12;
+                else if (this._location.Y > 37)
+                    this._screenLocation.Y = this._location.Y - 25;
+                else
+                    this._screenLocation.Y = this._location.Y;
+                return this._screenLocation;
+            }
         }
 
         /// <summary>

@@ -147,7 +147,7 @@ namespace Dungeon
             Tile newTile = grid[(int)newLocation.X, (int)newLocation.Y];
             bool validMove = true;
             bool wall = newTile.isWall;
-            if (newLocation.X > 0 && newLocation.X < 24 && newLocation.Y > 0 && newLocation.Y < 24 && !wall)
+            if (newLocation.X > 0 && newLocation.X < 49 && newLocation.Y > 0 && newLocation.Y < 49 && !wall)
             {
                 if (newTile.entities.Contains("dngn_closed_door"))
                 {
@@ -203,7 +203,7 @@ namespace Dungeon
         /// </summary>
         /// <param name="moveTo">Tile to move to</param>
         /// <param name="grid">Dungeon floor</param>
-        /// <returns>List of moves</returns>
+        /// <returns>List of Vector 2</returns>
         public List<Vector2> MoveTo(Vector2 moveTo, Tile[,] grid)
         {
             Tile newTile = grid[(int)moveTo.X, (int)moveTo.Y];  //move to

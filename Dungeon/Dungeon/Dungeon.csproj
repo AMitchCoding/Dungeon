@@ -107,6 +107,7 @@
     <Compile Include="PlayerSpriteDictionary.cs" />
     <Compile Include="TileDictionary.cs" />
     <Compile Include="Triangle.cs" />
+    <Compile Include="Viewport.cs" />
     <Compile Include="Weapon.cs" />
   </ItemGroup>
   <ItemGroup>

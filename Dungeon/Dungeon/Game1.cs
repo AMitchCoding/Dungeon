@@ -19,6 +19,7 @@ namespace Dungeon
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Viewport viewport = new Viewport();
         Vector2 tilePos = new Vector2(0, 0);
         Texture2D tileTexture;
         Texture2D playerSpriteSheet;
@@ -183,21 +184,11 @@ namespace Dungeon
 
             if (!menu)
             {
-                // TODO: Add your drawing code here
                 spriteBatch.Begin();
-                for (int x = 0; x < 25; x++)
-                {
-                    for (int y = 0; y < 25; y++)
-                    {
-                        destination = new Vector2(x * 32, y * 32);
-                        level.grid[x, y].DrawTile(spriteBatch, tileTexture, destination, tileDictionary);
-                        if (level.grid[x, y].npc != null)
-                            level.grid[x, y].npc.DrawNPC(spriteBatch, tileTexture);
-                        level.grid[x, y].DrawTileVisibility(spriteBatch, tileTexture, destination, tileDictionary);
-                    }
-                }
 
-                player.DrawPlayer(spriteBatch, playerSpriteSheet, player.location * 32);
+                viewport.DrawViewport(spriteBatch, level, player, tileTexture, tileDictionary);
+
+                player.DrawPlayer(spriteBatch, playerSpriteSheet, player.screenLocation * 32);
 
                 //Draw log and border
                 spriteBatch.Draw(border, new Vector2(0, 800), Color.White);
@@ -605,9 +596,9 @@ namespace Dungeon
             {
                 if (!oldState.IsKeyDown(Keys.F10))
                 {
-                    for (int x = 0; x < 25; x++)
+                    for (int x = 0; x < 50; x++)
                     {
-                        for (int y = 0; y < 25; y++)
+                        for (int y = 0; y < 50; y++)
                         {
                             level.grid[x, y].visible = true;
                         }
