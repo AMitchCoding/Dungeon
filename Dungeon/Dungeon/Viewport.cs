@@ -14,7 +14,8 @@ namespace Dungeon
         int maxXPos;
         int maxYPos;
         int gridCounterX = 0;
-        int gridCounterY = 0; 
+        int gridCounterY = 0;
+        Tile[,] viewGrid = new Tile[25, 25];
 
         public void DrawViewport(SpriteBatch spriteBatch, Dungeon dungeon, Player player, Texture2D tileTexture, TileDictionary tileDictionary)
         {
@@ -58,6 +59,7 @@ namespace Dungeon
             {
                 for (int y = minYPos; y <= maxYPos; y++)
                 {
+                    viewGrid[gridCounterX, gridCounterY] = dungeon.grid[x, y];
                     dungeon.grid[x, y].DrawTile(spriteBatch, tileTexture, new Vector2(gridCounterX * 32, gridCounterY * 32), tileDictionary);
                     if (dungeon.grid[x, y].npc != null)
                         dungeon.grid[x, y].npc.DrawNPC(spriteBatch, tileTexture);
@@ -72,6 +74,16 @@ namespace Dungeon
             minYPos = 0;
             maxXPos = 24;
             maxYPos = 24;
+        }
+
+        /// <summary>
+        /// Returns the chosen dungeon tile position
+        /// </summary>
+        /// <param name="tilePos">On screen tile chosen</param>
+        /// <returns>Vector 2 of the dungeon tile position</returns>
+        public Vector2 GetTile(Vector2 tilePos)
+        {
+            return viewGrid[(int)tilePos.X, (int)tilePos.Y].tilePos;
         }
 
     }

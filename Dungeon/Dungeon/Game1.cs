@@ -568,13 +568,13 @@ namespace Dungeon
                 }
             }
 
-            if (newState.IsKeyDown(Keys.X))
+            /*if (newState.IsKeyDown(Keys.X))
             {
                 if (!oldState.IsKeyDown(Keys.X))
                 {
-                    moveToList = player.MoveTo(new Vector2(12,12),level.grid);
+                    moveToList = Pathing.FindPath(new Vector2(12,12),level.grid);
                 }
-            }
+            }*/
 
             if (newState.IsKeyDown(Keys.Escape))
             {
@@ -608,18 +608,23 @@ namespace Dungeon
 
             if (newMouseState.LeftButton == ButtonState.Pressed)
             {
-                if (oldMouseState.LeftButton != ButtonState.Pressed)
+                if (oldMouseState.LeftButton != ButtonState.Pressed && 
+                    GraphicsDevice.Viewport.Bounds.Contains(new Point((int)newMouseState.X, (int)newMouseState.Y)))
                 {
                     Vector2 clickedTile = new Vector2();
-                    clickedTile.X = newMouseState.X / 32;
+                    Vector2 moveToTile = new Vector2();
+                    clickedTile.X = newMouseState.X / 32;  //Get on screen tile coords
                     clickedTile.Y = newMouseState.Y / 32;
-                    if (clickedTile.X >= 0 && clickedTile.X <= 24 &&
-                        clickedTile.Y >= 0 && clickedTile.Y <= 24 &&
-                        (level.grid[(int)clickedTile.X, (int)clickedTile.Y].seen ||
-                        level.grid[(int)clickedTile.X, (int)clickedTile.Y].visible))
+
+                    if (clickedTile.X >= 0 && clickedTile.X < 25 && clickedTile.Y >= 0 && clickedTile.Y < 25)
                     {
-                        moveToList = player.MoveTo(clickedTile, level.grid);
-                    }
+                        moveToTile = viewport.GetTile(clickedTile);  //Get whole dungeon tile coords
+                        if (level.grid[(int)moveToTile.X, (int)moveToTile.Y].seen ||
+                        level.grid[(int)moveToTile.X, (int)moveToTile.Y].visible)
+                        {
+                            moveToList = Pathing.FindPath(moveToTile, player.location, level.grid);
+                        }
+                    }                        
                 }
             }
 

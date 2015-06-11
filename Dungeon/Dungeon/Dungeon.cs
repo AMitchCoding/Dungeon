@@ -8,10 +8,10 @@ namespace Dungeon
 {
     class Dungeon
     {
-        //Random rand = new Random((int)DateTime.Now.Ticks);
-        Random rand = new Random(3);
+        Random rand = new Random((int)DateTime.Now.Ticks);
+        //Random rand = new Random(3);
         List<Rectangle> rooms = new List<Rectangle>();
-        int SIZE = 50;
+        static int SIZE = 50;
         Tile _upStairs;
         Tile _downStairs;
         Tile _monsTile;
@@ -22,8 +22,8 @@ namespace Dungeon
         private Tile[,] _grid;
         List<int> possibleDoors = new List<int>();
         int attempts = 1;
-        double dungeonArea = 2500.0;
-        double walls = 2500.0;
+        double dungeonArea = SIZE * SIZE;
+        double walls = SIZE * SIZE;
 
         /// <summary>
         /// Dungeon Constructor
@@ -78,7 +78,7 @@ namespace Dungeon
             {
                 Rectangle roomA = new Rectangle(0,0,0,0);
                 Rectangle roomB = new Rectangle(0,0,0,0);
-                Rectangle doorWall;
+                List<Vector2> roomPath = new List<Vector2>();
                 foreach(Rectangle room in rooms)
                 {
                     if (room.Contains((int)edge.vA.X, (int)edge.vA.Y))
@@ -91,16 +91,24 @@ namespace Dungeon
                         roomB = room;
                     }
                 }
-
-                if (roomA.Intersects(roomB))
+                roomPath = Pathing.FindPath(edge.vB, edge.vA, this._grid);
+                Tile nextTile = this._grid[(int)edge.vA.X, (int)edge.vA.Y];
+                foreach (Vector2 pos in roomPath)
                 {
-                    doorWall = Rectangle.Intersect(roomA, roomB);
-                    if (doorWall.Width == 1)
-                            this._grid[doorWall.X, rand.Next(doorWall.Y, doorWall.Y + doorWall.Height)].CreateDoor();
-                        else if (doorWall.Height == 1)
-                            this._grid[rand.Next(doorWall.X + 1, doorWall.X + doorWall.Width - 2), doorWall.Y].CreateDoor();                    
-                }
+                    if (nextTile.tileName == "dngn_rock_wall_dark_gray")
+                        nextTile.tileName = "dngn_floor";
 
+                    nextTile = this._grid[(int)(nextTile.tilePos.X + pos.X), (int)(nextTile.tilePos.Y + pos.Y)];
+                }
+            }
+
+            for (int x = 0; x < SIZE; x++)
+            {
+                for (int y = 0; y < SIZE; y++)
+                {
+                    if (this._grid[x, y].tileName == "dngn_rock_wall_dark_gray")
+                        this._grid[x, y].isWall = true;
+                }
             }
 
             foreach (NPC monster in _npcs)
